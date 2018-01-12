@@ -6,7 +6,7 @@ public class temp : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		
+		//test
 	}
 	
 	// Update is called once per frame
