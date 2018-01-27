@@ -7,10 +7,10 @@ using UnityEngine;
 
 public class NetworkSocket : MonoBehaviour
 {
-
+       
     // Variables
 
-    // Set host, post: EDIT IN ENGINE
+    // Set host, port: EDIT IN ENGINE
     public String host = "localhost";
     public Int32 port = 50000;
 
@@ -21,7 +21,7 @@ public class NetworkSocket : MonoBehaviour
 
     StreamWriter socket_writer;
     StreamReader socket_reader;
-	
+
 	// Update is called once per frame
 	void Update () {
 
@@ -37,6 +37,7 @@ public class NetworkSocket : MonoBehaviour
     void Awake()
     {
         setupSocket();
+        DontDestroyOnLoad(this);
     }
 
     void OnApplicationQuit()
