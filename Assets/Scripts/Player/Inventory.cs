@@ -5,7 +5,7 @@ using UnityEngine;
 public class Inventory : MonoBehaviour {
 
     public ItemManager ItemManager;
-    public List<Weapon> weapons;
+    public List<WeaponInfo> weapons;
 
     private void Awake() {
         weapons.Add(ItemManager.weaponList[0]);

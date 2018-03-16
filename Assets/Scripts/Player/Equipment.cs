@@ -7,7 +7,7 @@ public class Equipment : MonoBehaviour {
     public Inventory inventory;
     public EquipmentPart handEquip;
 
-    public Weapon currWeapon;
+    public WeaponInfo currWeapon;
 
     // Use this for initialization
     void Start () {
@@ -21,7 +21,7 @@ public class Equipment : MonoBehaviour {
 		
 	}
 
-    void EquipWeapon(Weapon weapon)
+    void EquipWeapon(WeaponInfo weapon)
     {
         handEquip.ChangeSprite(weapon.sprite);
         weapon.equipmentPart = handEquip;

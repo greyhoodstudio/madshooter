@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Bullet : MonoBehaviour {
+public class BulletInfo : MonoBehaviour {
 
     public Rigidbody2D myRigidbody2D;
     public float bulSpeed;

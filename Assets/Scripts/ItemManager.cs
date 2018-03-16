@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ItemManager : MonoBehaviour {
 
-    public Weapon[] weaponList;
+    public WeaponInfo[] weaponList;
 
 	// Use this for initialization
 	void Start () {
