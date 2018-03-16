@@ -350,9 +350,11 @@ GameObject:
   - component: {fileID: 1411902224}
   - component: {fileID: 1411902225}
   - component: {fileID: 1411902226}
+  - component: {fileID: 1411902227}
+  - component: {fileID: 1411902228}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -490,6 +492,32 @@ MonoBehaviour:
   inventory: {fileID: 1411902225}
   handEquip: {fileID: 301937310}
   currWeapon: {fileID: 0}
+--- !u!58 &1411902227
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1411902219}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.3
+--- !u!114 &1411902228
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1411902219}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 449964458e74c2b46b7f8a4489e0ff65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1929482008
 GameObject:
   m_ObjectHideFlags: 0
