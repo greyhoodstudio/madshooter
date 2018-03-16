@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ItemManager : MonoBehaviour {
-
-    public GameObject[] weaponList;
+public class ItemActionController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {

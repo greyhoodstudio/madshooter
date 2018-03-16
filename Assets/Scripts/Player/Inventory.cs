@@ -5,10 +5,10 @@ using UnityEngine;
 public class Inventory : MonoBehaviour {
 
     public ItemManager ItemManager;
-    public List<WeaponInfo> weapons;
+    public List<GameObject> weapons;
 
     private void Awake() {
-        weapons.Add(ItemManager.weaponList[0]);
+        weapons.Add(ItemManager.weaponList[0].gameObject);
     }
 
     // Use this for initialization

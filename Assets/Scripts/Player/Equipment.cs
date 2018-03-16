@@ -7,13 +7,13 @@ public class Equipment : MonoBehaviour {
     public Inventory inventory;
     public EquipmentPart handEquip;
 
-    public WeaponInfo currWeapon;
+    public GameObject currWeapon;
 
     // Use this for initialization
-    void Start () {
+    void Awake () {
         // Equip default weapon
         currWeapon = inventory.weapons[0];
-        EquipWeapon(currWeapon);
+        EquipWeapon(currWeapon.GetComponent<WeaponActionController>().equipmentPart);
     }
 	
 	// Update is called once per frame
@@ -21,9 +21,9 @@ public class Equipment : MonoBehaviour {
 		
 	}
 
-    void EquipWeapon(WeaponInfo weapon)
-    {
-        handEquip.ChangeSprite(weapon.sprite);
-        weapon.equipmentPart = handEquip;
+    void EquipWeapon(EquipmentPart equipmentRenderer) //장비 sprite
+    {        
+        equipmentRenderer = handEquip;
+        equipmentRenderer.ChangeSprite(equipmentRenderer.spriteRenderer.sprite);
     }
 }

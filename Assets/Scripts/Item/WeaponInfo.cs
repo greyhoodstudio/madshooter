@@ -4,23 +4,15 @@ using UnityEngine;
 
 public class WeaponInfo : MonoBehaviour {
 
+    public float loadSpeed { get; set; }
+    public float fireSpeed { get; set; }
+    public int durability { get; set; } //내구도
+    public int range { get; set; } //사정거리
+    public int loadBulletCnt { get; set; }//장전탄환갯수
     public Sprite sprite;
-    public GameObject bulletPrefab;
 
-    public EquipmentPart equipmentPart;
+    // Use this for initialization
+    void Start(){
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
-
-    public void Fire() {
-        GameObject bullet = Instantiate(bulletPrefab, new Vector2(equipmentPart.transform.position.x, equipmentPart.transform.position.y), equipmentPart.transform.rotation);
-        Destroy(bullet, 1.0f);
     }
 }

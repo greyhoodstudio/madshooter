@@ -8,10 +8,11 @@ public class PlayerActionController : MonoBehaviour {
     public Equipment equipment;
 
     private bool isFiring;
+    private WeaponActionController weapon;
 
     // Use this for initialization
 	void Start () {
-        
+        weapon = equipment.currWeapon.GetComponent<WeaponActionController>();
 	}
 	
 	// Update is called once per frame
@@ -20,7 +21,7 @@ public class PlayerActionController : MonoBehaviour {
         isFiring = Input.GetMouseButton(0);
         if (isFiring)
         {
-            equipment.currWeapon.Fire();
+            weapon.Fire();
         }
         
     }
