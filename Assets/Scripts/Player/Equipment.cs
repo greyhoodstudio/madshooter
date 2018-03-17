@@ -5,7 +5,7 @@ using UnityEngine;
 public class Equipment : MonoBehaviour {
 
     public Inventory inventory;
-    public EquipmentPart handEquip;
+    public EquipmentRenderer handEquip;
 
     public GameObject currWeapon;
 
@@ -13,7 +13,7 @@ public class Equipment : MonoBehaviour {
     void Awake () {
         // Equip default weapon
         currWeapon = inventory.weapons[0];
-        EquipWeapon(currWeapon.GetComponent<WeaponActionController>().equipmentPart);
+        EquipWeapon(currWeapon);
     }
 	
 	// Update is called once per frame
@@ -21,9 +21,10 @@ public class Equipment : MonoBehaviour {
 		
 	}
 
-    void EquipWeapon(EquipmentPart equipmentRenderer) //장비 sprite
-    {        
-        equipmentRenderer = handEquip;
-        equipmentRenderer.ChangeSprite(equipmentRenderer.spriteRenderer.sprite);
+    public void EquipWeapon(GameObject weapon) //장비 sprite
+    {
+        //equipmentRenderer = handEquip;
+        currWeapon = inventory.weapons[inventory.weapons.Count-1];
+        handEquip.ChangeSprite(currWeapon.GetComponent<SpriteRenderer>().sprite);
     }
 }
