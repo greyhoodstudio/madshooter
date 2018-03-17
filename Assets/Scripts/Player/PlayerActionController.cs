@@ -4,27 +4,41 @@ using UnityEngine;
 
 public class PlayerActionController : MonoBehaviour
 {
-
-    public Inventory inventory;
-    public Equipment equipment;
-
+    // Script References
+    private Inventory inventory;
+    private Equipment equipment;
+    private PlayerInfo playerInfo;
+    private MovementController movementController;
+    private WeaponActionController weaponActionController
+ 
+    // Variables
     private bool isFiring;
-    private WeaponActionController weaponActionController;
     private bool isItem; //아이템에 충돌했는가.
     private GameObject item;
+    
+    private bool dodgeInput;
+    public bool isDodging { get; set; }
 
     // Use this for initialization
-    void Start()
-    {
-        weaponActionController = equipment.currWeapon.GetComponent<WeaponActionController>(); //FIXED.
-        weaponActionController.equipmentPart = equipment.handEquip; //FIXED
-        isItem = false;
-    }
+	void Start () {
 
-    // Update is called once per frame
+        // Initialize scripts
+        inventory = GetComponent<Inventory>();
+        equipment = GetComponent<Equipment>();
+        playerInfo = GetComponent<PlayerInfo>();
+        movementController = GetComponent<MovementController>();
+        weaponActionController = equipment.currWeapon.GetComponent<WeaponActionController>(); //FIXED.
+        
+        weaponActionController.equipmentPart = equipment.handEquip; //FIXED
+        
+        // Initialize variables
+        isDodging = false;
+        isItem = false;
+	}
+	
+	// Update is called once per frame
     void Update()
     {
-
         isFiring = Input.GetMouseButton(0);
         if (isFiring)
         {
@@ -61,5 +75,27 @@ public class PlayerActionController : MonoBehaviour
 	{
         isItem = false;
 	}
+  
+        // Dodge Mechanic
+        dodgeInput = Input.GetMouseButton(1);
+        if (dodgeInput && !isDodging)
+        {
+            StartCoroutine("Dodge");
+        }
+    }
+
+    IEnumerator Dodge()
+    {
+        movementController.fixedTargetPosition = transform.position + movementController.normalizedMouseDirection * playerInfo.dodgeDistance;
+
+        Debug.Log("Start Dodge");
+        isDodging = true;
+        this.tag = "Dodge";
+        // 회피 애니메이션 추가 필요
+        yield return new WaitForSeconds(1);
+        this.tag = "Player";
+        isDodging = false;
+        Debug.Log("End Dodge");
+    }
 
 }
