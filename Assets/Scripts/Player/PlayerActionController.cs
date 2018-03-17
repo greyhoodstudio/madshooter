@@ -9,8 +9,7 @@ public class PlayerActionController : MonoBehaviour
     private Equipment equipment;
     private PlayerInfo playerInfo;
     private MovementController movementController;
-    private WeaponActionController weaponActionController
- 
+    private WeaponActionController weaponActionController;
     // Variables
     private bool isFiring;
     private bool isItem; //아이템에 충돌했는가.
@@ -45,6 +44,11 @@ public class PlayerActionController : MonoBehaviour
             weaponActionController.Fire();
         }
 
+        dodgeInput = Input.GetMouseButton(1);
+        if (dodgeInput && !isDodging) {
+            StartCoroutine("Dodge");
+        }
+
         if (Input.GetKeyDown(KeyCode.F) && isItem) // get item
         {
             Debug.Log("getStartItem");
@@ -74,8 +78,7 @@ public class PlayerActionController : MonoBehaviour
 	private void OnTriggerExit2D(Collider2D collision)
 	{
         isItem = false;
-	}
-  
+ 
         // Dodge Mechanic
         dodgeInput = Input.GetMouseButton(1);
         if (dodgeInput && !isDodging)
