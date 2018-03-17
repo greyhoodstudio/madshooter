@@ -7,11 +7,11 @@ public class WeaponActionController : MonoBehaviour {
     public GameObject bulletPrefab;
 
     public WeaponInfo weaponInfo { get; set; }
-    public EquipmentPart equipmentPart;
+    public EquipmentRenderer equipmentPart;
 
 	// Use this for initialization
 	void Start () {
-      
+        weaponInfo = new WeaponInfo();
 	}
 	
 	// Update is called once per frame
