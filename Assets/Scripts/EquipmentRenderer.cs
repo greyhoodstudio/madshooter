@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EquipmentPart : MonoBehaviour {
+public class EquipmentRenderer : MonoBehaviour {
 
     public SpriteRenderer spriteRenderer;
 
