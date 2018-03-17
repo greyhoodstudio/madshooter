@@ -4,20 +4,35 @@ using UnityEngine;
 
 public class MovementController : MonoBehaviour {
 
-    //public variables
-    public float movSpeed;
-    public float rotSpeed;
-
-    //private variables
+    // References
     private Rigidbody2D playerRigidbody;
-    [SerializeField]
-    private float axisX;
-    [SerializeField]
-    private float axisY;  
+    private PlayerActionController playerActionController;
+    private PlayerInfo playerInfo;
 
-	// Use this for initialization
+    // public variables
+    public float movSpeed { get; set; }
+    public float rotSpeed { get; set; }
+
+    // variables for calculation
+
+    private float axisX;
+    private float axisY;
+
+    public Vector3 mouseDirection { get; set; }
+    public Vector3 normalizedMouseDirection { get; set; }
+    public Vector3 mousePosition { get; set; }
+    public Vector3 fixedTargetPosition { get; set; }
+
+    // Use this for initialization
 	void Start () {
+        // Initialize references
         playerRigidbody = GetComponent<Rigidbody2D>();
+        playerActionController = GetComponent<PlayerActionController>();
+        playerInfo = GetComponent<PlayerInfo>();
+
+        // Initialize variables
+        movSpeed = 10f;
+        rotSpeed = 10f;
 	}
 	
 	// Update is called once per frame
@@ -36,8 +51,11 @@ public class MovementController : MonoBehaviour {
 
         //Rotation
 
-        Vector2 direction = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
-        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        mouseDirection = mousePosition - transform.position;
+        normalizedMouseDirection = mouseDirection / Vector2.Distance(transform.position, mousePosition);
+
+        float angle = Mathf.Atan2(mouseDirection.y, mouseDirection.x) * Mathf.Rad2Deg;
         Quaternion rotation = Quaternion.AngleAxis(angle, Vector3.forward);
         transform.rotation = Quaternion.Slerp(transform.rotation, rotation, rotSpeed * Time.deltaTime);
    
@@ -47,9 +65,15 @@ public class MovementController : MonoBehaviour {
 
         // Update movement
 
-        playerRigidbody.AddForce(new Vector2(axisX * movSpeed - playerRigidbody.velocity.x, axisY * movSpeed - playerRigidbody.velocity.y));
-        playerRigidbody.velocity = new Vector2(axisX == 0 ? 0 : playerRigidbody.velocity.x, axisY == 0 ? 0 : playerRigidbody.velocity.y);
-        
+        if (playerActionController.isDodging)
+        {
+            transform.position = Vector2.Lerp(transform.position, fixedTargetPosition, playerInfo.dodgeSpeed * Time.deltaTime);
+        }
+        else
+        {
+            playerRigidbody.AddForce(new Vector2(axisX * movSpeed - playerRigidbody.velocity.x, axisY * movSpeed - playerRigidbody.velocity.y));
+            playerRigidbody.velocity = new Vector2(axisX == 0 ? 0 : playerRigidbody.velocity.x, axisY == 0 ? 0 : playerRigidbody.velocity.y);
+        }
     }
 
 }
