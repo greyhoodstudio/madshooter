@@ -8,7 +8,7 @@ public class EquipmentRenderer : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		
+        spriteRenderer = GetComponent<SpriteRenderer>();
 	}
 	
 	// Update is called once per frame

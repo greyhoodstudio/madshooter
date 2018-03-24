@@ -4,27 +4,36 @@ using UnityEngine;
 
 public class Equipment : MonoBehaviour {
 
+    // Script References
     public Inventory inventory;
-    public EquipmentRenderer handEquip;
+    public EquipmentRenderer equipmentRenderer;
 
-    public GameObject currWeapon;
+    // Variables
+    public GameObject currWeapon; // Current Weapon
 
     // Use this for initialization
     void Awake () {
-        // Equip default weapon
-        currWeapon = inventory.weapons[0];
-        EquipWeapon(currWeapon);
+        
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    void Start()
+    {
+        // Initialize References
+        inventory = GetComponent<Inventory>();
+        equipmentRenderer = GetComponentInChildren<EquipmentRenderer>();
+    }
+
+    // Update is called once per frame
+    void Update () {
 		
 	}
 
     public void EquipWeapon(GameObject weapon) //장비 sprite
     {
         //equipmentRenderer = handEquip;
-        currWeapon = inventory.weapons[inventory.weapons.Count-1];
-        handEquip.ChangeSprite(currWeapon.GetComponent<SpriteRenderer>().sprite);
+        currWeapon = weapon;
+        weapon.transform.SetParent(equipmentRenderer.transform);
+        //inventory.weapons[inventory.weapons.Count-1];
+        equipmentRenderer.ChangeSprite(currWeapon.GetComponent<SpriteRenderer>().sprite);
     }
 }

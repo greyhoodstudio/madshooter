@@ -19,6 +19,7 @@ public class CameraController : MonoBehaviour {
 
     private void FixedUpdate() {
 
+        // Follow Player
         transform.position = Vector3.Slerp(transform.position, new Vector3(player.transform.position.x, player.transform.position.y, -10), movSpeed * Time.deltaTime);
 
     }

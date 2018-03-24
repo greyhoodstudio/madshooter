@@ -176,8 +176,8 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
-  m_Sprite: {fileID: 21300000, guid: 84c7c25bd260747be85456fa9c48c4b0, type: 3}
+  m_SortingOrder: 2
+  m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -185,7 +185,7 @@ SpriteRenderer:
   m_Size: {x: 0.78, y: 3.9}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
 --- !u!114 &301937310
 MonoBehaviour:
@@ -195,7 +195,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 301937307}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d28cc1b5b4706e342a89e0209af9cdbe, type: 3}
+  m_Script: {fileID: 11500000, guid: 82ec4a58799874037a62358691a3aa63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   spriteRenderer: {fileID: 301937309}
@@ -272,7 +272,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bulletPrefab: {fileID: 1631028880721362, guid: 303b3501688d5b440b2ecee99e678ebe,
     type: 2}
-  equipmentPart: {fileID: 301937310}
+  weaponInfo: {fileID: 0}
+  equipmentRenderer: {fileID: 0}
 --- !u!114 &721470033
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -413,7 +414,7 @@ GameObject:
   - component: {fileID: 1411902228}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -507,10 +508,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a886be89440fbe2459839fb1f1f5e96c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movSpeed: 9
-  rotSpeed: 7
-  axisX: 0
-  axisY: 0
+  playerRigidbody: {fileID: 0}
+  playerActionController: {fileID: 0}
+  playerInfo: {fileID: 0}
 --- !u!114 &1411902224
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -522,8 +522,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1684ec2c973845842b8d49c7c74329a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inventory: {fileID: 1411902225}
-  equipment: {fileID: 1411902226}
+  inventory: {fileID: 0}
+  equipment: {fileID: 0}
+  playerInfo: {fileID: 0}
+  movementController: {fileID: 0}
+  weaponActionController: {fileID: 0}
+  weaponInfo: {fileID: 0}
+  isFiring: 0
+  fireLock: 0
+  isItem: 0
 --- !u!114 &1411902225
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -535,7 +542,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02983fc7054f05b469db73cb10a9c763, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ItemManager: {fileID: 558838583}
+  itemManager: {fileID: 0}
   weapons: []
 --- !u!114 &1411902226
 MonoBehaviour:
@@ -548,8 +555,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d18b53183d1c4fc48a3a966b3db7e581, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inventory: {fileID: 1411902225}
-  handEquip: {fileID: 301937310}
+  inventory: {fileID: 0}
+  equipmentRenderer: {fileID: 0}
   currWeapon: {fileID: 0}
 --- !u!58 &1411902227
 CircleCollider2D:
@@ -620,9 +627,55 @@ Prefab:
         type: 2}
       propertyPath: equipmentPart
       value: 
-      objectReference: {fileID: 301937310}
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
+  m_IsPrefabParent: 0
+--- !u!1001 &1894052383
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4622719051475790, guid: 74371ceaaf4ea43aca03441e36fa274b, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 3.99
+      objectReference: {fileID: 0}
+    - target: {fileID: 4622719051475790, guid: 74371ceaaf4ea43aca03441e36fa274b, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: -0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 4622719051475790, guid: 74371ceaaf4ea43aca03441e36fa274b, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: -0.18241943
+      objectReference: {fileID: 0}
+    - target: {fileID: 4622719051475790, guid: 74371ceaaf4ea43aca03441e36fa274b, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4622719051475790, guid: 74371ceaaf4ea43aca03441e36fa274b, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4622719051475790, guid: 74371ceaaf4ea43aca03441e36fa274b, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4622719051475790, guid: 74371ceaaf4ea43aca03441e36fa274b, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4622719051475790, guid: 74371ceaaf4ea43aca03441e36fa274b, type: 2}
+      propertyPath: m_RootOrder
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1137900464191428, guid: 74371ceaaf4ea43aca03441e36fa274b, type: 2}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: 74371ceaaf4ea43aca03441e36fa274b, type: 2}
   m_IsPrefabParent: 0
 --- !u!1 &1929482008
 GameObject:

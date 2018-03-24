@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class ItemActionController : MonoBehaviour {
-    //item get
-    //item drop
-
+    
 	// Use this for initialization
 	void Start () {
-		
+        // Initialize tag
+        this.tag = "Item";
 	}
 	
 	// Update is called once per frame
@@ -16,18 +15,20 @@ public class ItemActionController : MonoBehaviour {
 		
 	}
 
+    // Get Item
     void getItem(){
-        gameObject.GetComponent<WeaponActionController>().weaponInfo.status = 1; //FIXED. enum으로 변경. 
+        GetComponent<WeaponActionController>().weaponInfo.status = 1; //FIXED. enum으로 변경. 
         
     }
 
+    // Drop Item
     void dropItem(){
-        gameObject.GetComponent<WeaponActionController>().weaponInfo.status = 2; 
+        GetComponent<WeaponActionController>().weaponInfo.status = 2; 
     }
 
 	private void OnTriggerEnter2D(Collider2D player)
 	{
-        if(player.gameObject.tag == "Player"){
+        if(player.tag == "Player"){
             getItem();
         }
 	}

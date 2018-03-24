@@ -4,16 +4,20 @@ using UnityEngine;
 
 public class Inventory : MonoBehaviour {
 
-    public ItemManager ItemManager;
-    public List<GameObject> weapons;
+    // Script References
+    public ItemManager itemManager;
+
+    // Variables
+    public List<GameObject> weapons; // List of weapons in inventory
 
     private void Awake() {
-        weapons.Add(ItemManager.weaponList[0].gameObject);
+        
     }
 
     // Use this for initialization
     void Start () {
-		
+        // Initialize References
+        itemManager = FindObjectOfType<ItemManager>().GetComponent<ItemManager>();
 	}
 	
 	// Update is called once per frame

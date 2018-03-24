@@ -11,7 +11,7 @@ public class BulletInfo : MonoBehaviour {
     // Use this for initialization
     void Start () {
         // Initialize variables
-        bulletSpeed = 10f;
+        bulletSpeed = 18f;
         bulletTime = 4f;
         bulletDamage = 10f;
     }

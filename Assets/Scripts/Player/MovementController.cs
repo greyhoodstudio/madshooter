@@ -4,16 +4,16 @@ using UnityEngine;
 
 public class MovementController : MonoBehaviour {
 
-    // References
-    private Rigidbody2D playerRigidbody;
-    private PlayerActionController playerActionController;
-    private PlayerInfo playerInfo;
+    // Script References
+    public Rigidbody2D playerRigidbody;
+    public PlayerActionController playerActionController;
+    public PlayerInfo playerInfo;
 
-    // public variables
+    // Variables
     public float movSpeed { get; set; }
     public float rotSpeed { get; set; }
 
-    // variables for calculation
+    // Variables for calculation
 
     private float axisX;
     private float axisY;
@@ -31,7 +31,7 @@ public class MovementController : MonoBehaviour {
         playerInfo = GetComponent<PlayerInfo>();
 
         // Initialize variables
-        movSpeed = 10f;
+        movSpeed = 4f;
         rotSpeed = 10f;
 	}
 	
@@ -67,12 +67,16 @@ public class MovementController : MonoBehaviour {
 
         if (playerActionController.isDodging)
         {
+            // Dodge
+            playerRigidbody.velocity = new Vector2(0, 0);
             transform.position = Vector2.Lerp(transform.position, fixedTargetPosition, playerInfo.dodgeSpeed * Time.deltaTime);
         }
         else
         {
-            playerRigidbody.AddForce(new Vector2(axisX * movSpeed - playerRigidbody.velocity.x, axisY * movSpeed - playerRigidbody.velocity.y));
-            playerRigidbody.velocity = new Vector2(axisX == 0 ? 0 : playerRigidbody.velocity.x, axisY == 0 ? 0 : playerRigidbody.velocity.y);
+            // Movement
+            playerRigidbody.velocity = new Vector2(axisX*movSpeed, axisY*movSpeed);
+            //playerRigidbody.AddForce(new Vector2(axisX * movSpeed - playerRigidbody.velocity.x, axisY * movSpeed - playerRigidbody.velocity.y));
+            //playerRigidbody.velocity = new Vector2(axisX == 0 ? 0 : playerRigidbody.velocity.x, axisY == 0 ? 0 : playerRigidbody.velocity.y);
         }
     }
 
