@@ -25,7 +25,9 @@ public class Equipment : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-		
+        //if(currWeapon!=null){
+        //    currWeapon.transform.SetPositionAndRotation(currWeapon.transform.position + new Vector3(10f, 10f, 10f),Quaternion.identity);
+        //}
 	}
 
     public void EquipWeapon(GameObject weapon) //장비 sprite

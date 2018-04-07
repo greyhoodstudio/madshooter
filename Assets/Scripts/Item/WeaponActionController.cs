@@ -26,6 +26,7 @@ public class WeaponActionController : MonoBehaviour {
         firePosition = new Vector2(equipmentRenderer.transform.position.x, equipmentRenderer.transform.position.y);
         fireRotation = equipmentRenderer.transform.rotation;
         GameObject bullet = Instantiate(bulletPrefab, firePosition, fireRotation);
+        Debug.Log("fire");
         Destroy(bullet, weaponInfo.range);
     }
 
