@@ -13,7 +13,7 @@ public class BulletActionController : MonoBehaviour {
     // Collision
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "Player" && isShot)
+        if (collision.gameObject.tag == "Player")
         {
             collision.gameObject.GetComponent<PlayerInfo>().playerHealth -= bulletInfo.bulletDamage;
             // TODO 투사체 파괴 애니메이션 추가 필요

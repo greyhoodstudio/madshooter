@@ -37,6 +37,7 @@ public class NetworkSocket : MonoBehaviour
     void Awake()
     {
         setupSocket();
+        writeSocket("dg6676");
         DontDestroyOnLoad(this);
     }
 
