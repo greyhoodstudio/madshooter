@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerInfo : MonoBehaviour {
 
     // Variables
+    public int playerId { get; set; }
     public float playerHealth { get; set; }
     public float dodgeDistance { get; set; }
     public float dodgeSpeed { get; set; }

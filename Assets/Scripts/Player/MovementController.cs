@@ -33,6 +33,9 @@ public class MovementController : MonoBehaviour {
         // Initialize variables
         movSpeed = 4f;
         rotSpeed = 10f;
+
+        //임시
+        ClientManager.playerInfo = this.playerInfo;
 	}
 	
 	// Update is called once per frame
