@@ -7,11 +7,13 @@ public class ClientManager : MonoBehaviour {
 
     public static string playerName; 
     public static int playerId;
-
-    public static Dictionary<int, PlayerInfo> playerList;
     public GameObject myPlayer;
 
-    public static GameStartEvent gameStartEvent; //preload gameStartEvent
+    public static Dictionary<int, PlayerInfo> playerList;
+    
+
+    //preload gameStartEvent
+    public static GameStartEvent gameStartEvent; 
 
 
     // Input variables
@@ -19,7 +21,7 @@ public class ClientManager : MonoBehaviour {
     private float axisY;
     private Vector2 mousePosition;
     private bool LeftMouseClicked = false;
-    private bool fireLock;
+    private bool fireLock = false;
 
 
     private void Start()
@@ -44,7 +46,7 @@ public class ClientManager : MonoBehaviour {
         if (LeftMouseClicked && !fireLock)
         {
             mousePosition = (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            JsonHandler.SendFireEvent(playerId, -1, myPlayer.transform.position, mousePosition);
+            JsonHandler.SendFireEvent(playerId, -1, myPlayer.transform.GetChild(0).transform.position, mousePosition);
             StartCoroutine("FireLock");
         }        
         
@@ -54,12 +56,18 @@ public class ClientManager : MonoBehaviour {
     {
         if (scene.buildIndex == 1)
         {
-            foreach (NewPlayerEvent npe in gameStartEvent.PlayerList)
-            { 
+            for (int i = 0; i<gameStartEvent.PlayerList.Count; i++)
+            {
                 //set player hashtable
+                NewPlayerEvent npe = gameStartEvent.PlayerList[i];
                 GameObject player = Instantiate(Resources.Load("Prefabs/Player")) as GameObject;
-                playerId = npe.PlayerId; //myPlayerId
                 playerList.Add(npe.PlayerId, player.GetComponent<PlayerInfo>());
+
+                if (i == 0)
+                {
+                    playerId = npe.PlayerId; //myPlayerId
+                    myPlayer = player; //my player object
+                }
             }
 
             StartCoroutine("SendInputData");
@@ -68,7 +76,7 @@ public class ClientManager : MonoBehaviour {
     
     public static void StartGame (GameStartEvent _gameStartEvent)
     {
-        gameStartEvent =_gameStartEvent;
+        gameStartEvent = _gameStartEvent;
         SceneManager.LoadScene(1);
         return;
     }
