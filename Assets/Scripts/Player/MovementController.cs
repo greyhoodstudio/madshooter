@@ -35,7 +35,7 @@ public class MovementController : MonoBehaviour {
         rotSpeed = 10f;
 
         //임시
-        ClientManager.playerInfo = this.playerInfo;
+        ClientManager.updatePlayerInfo = this.playerInfo;
 	}
 	
 	// Update is called once per frame

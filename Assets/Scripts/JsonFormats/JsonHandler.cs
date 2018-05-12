@@ -82,8 +82,7 @@ public class JsonHandler {
                 catch (Exception e)
                 {
                     Debug.LogError(e);
-                }                
-                
+                }                                
                 break;
             default:
                 try
