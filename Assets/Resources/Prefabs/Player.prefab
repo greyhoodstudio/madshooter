@@ -136,6 +136,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 449964458e74c2b46b7f8a4489e0ff65, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerId: 0
 --- !u!114 &114169562738897054
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -150,6 +151,8 @@ MonoBehaviour:
   playerRigidbody: {fileID: 0}
   playerActionController: {fileID: 0}
   playerInfo: {fileID: 0}
+  axisX: 0
+  axisY: 0
 --- !u!114 &114430414812651712
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -161,7 +164,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02983fc7054f05b469db73cb10a9c763, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemManager: {fileID: 0}
   weapons: []
 --- !u!114 &114869476999246534
 MonoBehaviour:

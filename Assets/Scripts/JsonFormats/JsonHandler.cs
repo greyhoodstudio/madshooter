@@ -89,7 +89,7 @@ public class JsonHandler {
                 {
                     InputData inputData = JsonUtility.FromJson<InputData>(json);
                     Debug.Log("Event Socket parsing result: " + inputData);
-                    
+                    ClientManager.UpdatePlayer(inputData);
                 }
                 catch (Exception e)
                 {

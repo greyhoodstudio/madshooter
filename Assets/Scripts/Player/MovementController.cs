@@ -8,15 +8,14 @@ public class MovementController : MonoBehaviour {
     public Rigidbody2D playerRigidbody;
     public PlayerActionController playerActionController;
     public PlayerInfo playerInfo;
+    public float axisX;
+    public float axisY;
 
     // Variables
     public float movSpeed { get; set; }
     public float rotSpeed { get; set; }
 
     // Variables for calculation
-
-    private float axisX;
-    private float axisY;
 
     public Vector3 mouseDirection { get; set; }
     public Vector3 normalizedMouseDirection { get; set; }
@@ -33,24 +32,13 @@ public class MovementController : MonoBehaviour {
         // Initialize variables
         movSpeed = 4f;
         rotSpeed = 10f;
-
-        //임시
-        ClientManager.updatePlayerInfo = this.playerInfo;
-	}
-	
+	}	
 	// Update is called once per frame
 	void Update () {
 
         //Movement
-
-        axisX = Input.GetAxis("Horizontal");
-        axisY = Input.GetAxis("Vertical");
-
-        if (axisX > 0) axisX = 1;
-        else if (axisX < 0) axisX = -1;
-
-        if (axisY > 0) axisY = 1;
-        else if (axisY < 0) axisY = -1;
+        //axisX = Input.GetAxis("Horizontal");
+        //axisY = Input.GetAxis("Vertical");
 
         //Rotation
 
