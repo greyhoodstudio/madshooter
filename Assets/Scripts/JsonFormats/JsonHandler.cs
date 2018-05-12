@@ -23,7 +23,8 @@ public class JsonHandler {
                 break;
             case '3':
                 NewPlayerEvent newPlayerEvent = JsonUtility.FromJson<NewPlayerEvent>(json.Substring(1));
-                Debug.Log("Event Socket parsing result: " + newPlayerEvent);                               
+                Debug.Log("Event Socket parsing result: " + newPlayerEvent);
+                ClientManager.HandleNewPlayerEvent(newPlayerEvent);
                 break;
             case '4':
                 GameStartEvent gameStartEvent = JsonUtility.FromJson<GameStartEvent>(json.Substring(1));

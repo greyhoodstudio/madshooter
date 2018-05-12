@@ -102,7 +102,6 @@ public class ClientManager : MonoBehaviour {
             Vector2 mousePosition = new Vector2(fireEvent.MousePosX, fireEvent.MousePosY);
             pInfo.GetComponent<PlayerActionController>().FireWeapon(fireEvent.BulletId, firePosition, mousePosition);
         }
-        
         return;
     }
 
@@ -122,5 +121,12 @@ public class ClientManager : MonoBehaviour {
             p.axisY = input.axis_y;
         }
         return;
+    }
+
+    public static void HandleNewPlayerEvent(NewPlayerEvent _newPlayerEvent){
+
+        GameObject player = Instantiate(Resources.Load("Prefabs/Player")) as GameObject;
+        player.transform.position = new Vector3(30,30,1);
+        playerList.Add(_newPlayerEvent.PlayerId, player.GetComponent<PlayerInfo>());
     }
 }
