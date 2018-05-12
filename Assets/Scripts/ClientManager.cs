@@ -56,16 +56,16 @@ public class ClientManager : MonoBehaviour {
     {
         if (scene.buildIndex == 1)
         {
-            for (int i = 0; i<gameStartEvent.PlayerList.Count; i++)
+            for (int i = 0; i < gameStartEvent.PlayerList.Count; i++)
             {
                 //set player hashtable
                 NewPlayerEvent npe = gameStartEvent.PlayerList[i];
                 GameObject player = Instantiate(Resources.Load("Prefabs/Player")) as GameObject;
                 playerList.Add(npe.PlayerId, player.GetComponent<PlayerInfo>());
-
                 if (i == 0)
                 {
                     playerId = npe.PlayerId; //myPlayerId
+                    Debug.Log("My player ID: " + playerId);
                     myPlayer = player; //my player object
                 }
             }
@@ -125,8 +125,10 @@ public class ClientManager : MonoBehaviour {
 
     public static void HandleNewPlayerEvent(NewPlayerEvent _newPlayerEvent){
 
+        if (playerList.ContainsKey(_newPlayerEvent.PlayerId))
+            return;
         GameObject player = Instantiate(Resources.Load("Prefabs/Player")) as GameObject;
-        player.transform.position = new Vector3(30,30,1);
+        // player.transform.position = new Vector3(30,30,1);
         playerList.Add(_newPlayerEvent.PlayerId, player.GetComponent<PlayerInfo>());
     }
 }
