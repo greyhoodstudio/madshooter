@@ -89,10 +89,7 @@ public class JsonHandler {
                 {
                     InputData inputData = JsonUtility.FromJson<InputData>(json);
                     Debug.Log("Event Socket parsing result: " + inputData);
-                    if (inputData.input_type == 1)
-                        ClientManager.UpdatePlayer(inputData);
-                    if (inputData.input_type == 2)
-                        ClientManager.UpdateBullet(inputData);
+                    
                 }
                 catch (Exception e)
                 {
@@ -125,9 +122,9 @@ public class JsonHandler {
         return;
     }
 
-    public static void SendInputData (int inputType, int objectId, int objectState, float pX, float pY, float rX, float rZ)
+    public static void SendInputData (int pid, float x, float y)
     {
-        string newJson = JsonUtility.ToJson(new InputData(inputType, objectId, objectState, pX, pY, rX, rZ));
+        string newJson = JsonUtility.ToJson(new InputData(pid, x, y));
         Debug.Log("InputData message created: " + newJson);
         NetworkManager.writeInputSocket(newJson);
         Debug.Log("InputData message sent.");

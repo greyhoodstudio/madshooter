@@ -6,22 +6,17 @@ using System;
 [Serializable]
 public class InputData {
 
-    public int input_type;
-    public int object_id;
-    public int object_state;
+    public int player_id;
+    public int axis_x;
+    public int axis_y;
     public float position_x;
     public float position_y;
-    public float rotation_x;
-    public float rotation_z;
+    // 다른 Input에 대한 것도 추가 고려
 
-    public InputData (int inputType, int objectId, int objectState, float pX, float pY, float rX, float rZ)
+    public InputData (int playerId, float axisX, float axisY)
     {
-        input_type = inputType;
-        object_id = objectId;
-        object_state = objectState;
-        position_x = pX;
-        position_y = pY;
-        rotation_x = rX;
-        rotation_z = rZ;
+        player_id = playerId;
+        axis_x = (int)axisX;
+        axis_y = (int)axisY;
     }
 }
