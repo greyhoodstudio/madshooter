@@ -50,12 +50,12 @@ public class PlayerActionController : MonoBehaviour
     void Update()
     {
         // Fire
-        isFiring = Input.GetMouseButton(0);
-        if (isFiring && !fireLock && equipment.currWeapon)
-        {
-            weaponActionController.Fire();
-            StartCoroutine("FireLock");
-        }
+        // isFiring = Input.GetMouseButton(0);
+        // if (isFiring && !fireLock && equipment.currWeapon)
+        // {
+        //     weaponActionController.Fire();
+        //     StartCoroutine("FireLock");
+        // }
 
         // Dodge
         dodgeInput = Input.GetMouseButton(1);
@@ -75,12 +75,21 @@ public class PlayerActionController : MonoBehaviour
         }
     }
 
+    public void FireWeapon(int bulletId, Vector2 firePosition, Vector2 mousePosition)
+    {
+        // Calculate bullet rotation
+        Vector2 direction = mousePosition - firePosition;
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        Quaternion fireRotation = Quaternion.AngleAxis(angle, Vector3.forward);
+
+        weaponActionController.Fire(bulletId, firePosition, fireRotation);
+    }
+
     void equipItem(){
         equipment.EquipWeapon(item);
         weaponActionController = equipment.currWeapon.GetComponent<WeaponActionController>();
         weaponActionController.equipmentRenderer = equipment.equipmentRenderer;
-        weaponInfo = equipment.currWeapon.GetComponent<WeaponInfo>();
-             
+        weaponInfo = equipment.currWeapon.GetComponent<WeaponInfo>();             
     }
 
 	private void OnTriggerStay2D(Collider2D other)
@@ -94,13 +103,6 @@ public class PlayerActionController : MonoBehaviour
 	private void OnTriggerExit2D(Collider2D collision)
 	{
         if (isItem) isItem = false; 
-    }
-
-    IEnumerator FireLock()
-    {
-        fireLock = true;
-        yield return new WaitForSeconds(weaponInfo.fireSpeed);
-        fireLock = false;
     }
 
     IEnumerator Dodge()

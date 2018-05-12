@@ -22,10 +22,9 @@ public class WeaponActionController : MonoBehaviour {
 		
 	}
 
-    public void Fire() {
-        firePosition = new Vector2(equipmentRenderer.transform.position.x, equipmentRenderer.transform.position.y);
-        fireRotation = equipmentRenderer.transform.rotation;
+    public void Fire(int bulletId, Vector2 firePosition, Quaternion fireRotation) {
         GameObject bullet = Instantiate(bulletPrefab, firePosition, fireRotation);
+        bullet.GetComponent<BulletInfo>().bulletId = bulletId;
         Debug.Log("fire");
         Destroy(bullet, weaponInfo.range);
     }

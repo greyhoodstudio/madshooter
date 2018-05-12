@@ -13,50 +13,27 @@ public class JsonHandler {
         switch (json[0])
         {
             case '1':
-                try
-                {
-                    GameConnect gameConnect = JsonUtility.FromJson<GameConnect>(json.Substring(1));
-                    Debug.Log("Event Socket parsing result: " + gameConnect);
-                    EventManager.ConfirmEventSocket();
-                }
-                catch (Exception e)
-                {
-                    Debug.LogError(e);
-                }
+                GameConnect gameConnect = JsonUtility.FromJson<GameConnect>(json.Substring(1));
+                Debug.Log("Event Socket parsing result: " + gameConnect);
+                EventManager.ConfirmEventSocket();
                 break;
             case '2':
-                try
-                {
-                    CommonEvent commonEvent = JsonUtility.FromJson<CommonEvent>(json.Substring(1));
-                    Debug.Log("Event Socket parsing result: " + commonEvent);
-                }
-                catch (Exception e)
-                {
-                    Debug.LogError(e);
-                }
+                CommonEvent commonEvent = JsonUtility.FromJson<CommonEvent>(json.Substring(1));
+                Debug.Log("Event Socket parsing result: " + commonEvent);
                 break;
             case '3':
-                try
-                {
-                    NewPlayerEvent newPlayerEvent = JsonUtility.FromJson<NewPlayerEvent>(json.Substring(1));
-                    Debug.Log("Event Socket parsing result: " + newPlayerEvent);
-                }
-                catch (Exception e)
-                {
-                    Debug.LogError(e);
-                }               
+                NewPlayerEvent newPlayerEvent = JsonUtility.FromJson<NewPlayerEvent>(json.Substring(1));
+                Debug.Log("Event Socket parsing result: " + newPlayerEvent);                               
                 break;
             case '4':
-                try
-                {
-                    GameStartEvent gameStartEvent = JsonUtility.FromJson<GameStartEvent>(json.Substring(1));
-                    Debug.Log("Event Socket parsing result: " + gameStartEvent);
-                    ClientManager.StartGame(gameStartEvent);                    
-                }
-                catch (Exception e)
-                {
-                    Debug.LogError(e);
-                }
+                GameStartEvent gameStartEvent = JsonUtility.FromJson<GameStartEvent>(json.Substring(1));
+                Debug.Log("Event Socket parsing result: " + gameStartEvent);
+                ClientManager.StartGame(gameStartEvent);                  
+                break;
+            case '5':
+                FireEvent fireEvent = JsonUtility.FromJson<FireEvent>(json.Substring(1));
+                Debug.Log("Event Socket parsing result: " + fireEvent);
+                ClientManager.HandleFireEvent(fireEvent);
                 break;
             default:
                 break;
@@ -73,31 +50,15 @@ public class JsonHandler {
         switch (json[0])
         {
             case '1':
-                try
-                {
-                    GameConnect gameConnect = JsonUtility.FromJson<GameConnect>(json.Substring(1));
-                    Debug.Log("Event Socket parsing result: " + gameConnect);
-                    EventManager.ConfirmInputSocket();
-                }
-                catch (Exception e)
-                {
-                    Debug.LogError(e);
-                }                                
+                GameConnect gameConnect = JsonUtility.FromJson<GameConnect>(json.Substring(1));
+                Debug.Log("Event Socket parsing result: " + gameConnect);
+                EventManager.ConfirmInputSocket();                                                
                 break;
             default:
-                try
-                {
-                    InputData inputData = JsonUtility.FromJson<InputData>(json);
-                    Debug.Log("Event Socket parsing result: " + inputData);
-                    
-                }
-                catch (Exception e)
-                {
-                    Debug.LogError(e);
-                }                
+                InputData inputData = JsonUtility.FromJson<InputData>(json);
+                Debug.Log("Event Socket parsing result: " + inputData);                                
                 break;
         }
-
         return;
     }
 
@@ -128,6 +89,15 @@ public class JsonHandler {
         Debug.Log("InputData message created: " + newJson);
         NetworkManager.writeInputSocket(newJson);
         Debug.Log("InputData message sent.");
+        return;
+    }
+
+    public static void SendFireEvent (int pid, int bid, Vector2 firePos, Vector2 MousePos)
+    {
+        string newJson = "5" + JsonUtility.ToJson(new FireEvent(pid, bid, firePos, MousePos));
+        Debug.Log("FireEvent message created: " + newJson);
+        NetworkManager.writeEventSocket(newJson);
+        Debug.Log("FireEvent message sent.");
         return;
     }
 }
