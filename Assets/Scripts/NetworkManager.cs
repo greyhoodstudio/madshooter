@@ -19,6 +19,9 @@ public class NetworkManager : MonoBehaviour
     internal static Boolean eventSocketReady = false;
     internal static Boolean inputSocketReady = false;
 
+    private Boolean eventListening = false;
+    private Boolean inputListening = false;
+
     internal static String eventBuffer = "";
     internal static String inputBuffer = "";
 
@@ -34,33 +37,85 @@ public class NetworkManager : MonoBehaviour
     static StreamReader eventSocketReader;
     static StreamReader inputSocketReader;
 
-	// Update is called once per frame
-	void Update () {
-
-        eventBuffer = readEventSocket();
-        inputBuffer = readInputSocket();
-
-        if (eventBuffer != "")
-            Debug.Log(eventBuffer);
-            JsonHandler.HandleJsonEvent(eventBuffer);
-
-        if (inputBuffer != "")
-            Debug.Log(inputBuffer);
-            JsonHandler.HandleJsonInput(inputBuffer);
-
-    }
-
+    // 시작할 때
     void Awake()
     {
-        setupEventSocket();        
+        setupEventSocket();
         setupInputSocket();
         DontDestroyOnLoad(this);
     }
 
+    // 종료할 때
     void OnApplicationQuit()
     {
         closeEventSocket();
         closeInputSocket();
+    }
+
+    // Update is called once per frame
+    void Update () {
+
+        if (!eventListening && eventSocketReady)
+        {
+            eventListening = true;
+            StartCoroutine("ListenEventSocket");            
+        }
+
+        if (!inputListening && inputSocketReady)
+        {
+            inputListening = true;
+            StartCoroutine("ListenInputSocket");
+        }
+    }
+
+    IEnumerator ListenEventSocket()
+    {
+        if (!eventSocketReady)
+        {
+            eventListening = false;
+            yield break;
+        }            
+        else
+        {
+            while (eventSocketReady)
+            {
+                yield return null;
+                eventBuffer = readEventSocket();
+
+                if (eventBuffer != "")
+                {
+                    Debug.Log(eventBuffer);
+                    JsonHandler.HandleJsonEvent(eventBuffer);
+                }
+            }
+            eventListening = false;
+            yield break;
+        }        
+    }
+
+    IEnumerator ListenInputSocket()
+    {
+        if (!inputSocketReady)
+        {
+            inputListening = false;
+            yield break;
+        }            
+        else
+        {
+            while (inputSocketReady)
+            {
+                yield return null;
+                inputBuffer = readInputSocket();
+
+                if (inputBuffer != "")
+                {
+                    Debug.Log(inputBuffer);
+                    JsonHandler.HandleJsonInput(inputBuffer);
+                }
+            }
+            inputListening = false;
+            yield break;
+        }
     }
 
     public void setupEventSocket()
