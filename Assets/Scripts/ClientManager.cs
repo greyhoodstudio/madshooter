@@ -116,6 +116,7 @@ public class ClientManager : MonoBehaviour {
     }
 
     public static void HandleNewPlayerEvent(NewPlayerEvent _newPlayerEvent){
+
         GameObject player = Instantiate(Resources.Load("Prefabs/Player")) as GameObject;
         player.transform.position = new Vector3(30,30,1);
         playerList.Add(_newPlayerEvent.PlayerId, player.GetComponent<PlayerInfo>());
