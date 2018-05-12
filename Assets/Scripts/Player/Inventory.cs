@@ -5,7 +5,7 @@ using UnityEngine;
 public class Inventory : MonoBehaviour {
 
     // Script References
-    public ItemManager itemManager;
+    // public ItemManager itemManager;
 
     // Variables
     public List<GameObject> weapons; // List of weapons in inventory
@@ -17,7 +17,7 @@ public class Inventory : MonoBehaviour {
     // Use this for initialization
     void Start () {
         // Initialize References
-        itemManager = FindObjectOfType<ItemManager>().GetComponent<ItemManager>();
+    //    itemManager = FindObjectOfType<ItemManager>().GetComponent<ItemManager>();
 	}
 	
 	// Update is called once per frame

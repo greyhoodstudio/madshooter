@@ -56,7 +56,8 @@ public class JsonHandler {
                 break;
             default:
                 InputData inputData = JsonUtility.FromJson<InputData>(json);
-                Debug.Log("Event Socket parsing result: " + inputData);                                
+                Debug.Log("Event Socket parsing result: " + inputData);
+                ClientManager.UpdatePlayer(inputData);
                 break;
         }
         return;

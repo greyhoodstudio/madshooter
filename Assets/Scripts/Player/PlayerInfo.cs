@@ -5,10 +5,11 @@ using UnityEngine;
 public class PlayerInfo : MonoBehaviour {
 
     // Variables
-    public int playerId { get; set; }
+    public int playerId;
     public float playerHealth { get; set; }
     public float dodgeDistance { get; set; }
     public float dodgeSpeed { get; set; }
+
 
 	// Use this for initialization
 	void Start () {

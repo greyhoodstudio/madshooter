@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour {
 
-    public GameObject target;
+    //public GameObject target;
     public float movSpeed;
 
     // Use this for initialization
@@ -19,12 +19,12 @@ public class CameraController : MonoBehaviour {
 
     private void FixedUpdate() {
         // Follow Target
-        transform.position = Vector3.Slerp(transform.position, new Vector3(target.transform.position.x, target.transform.position.y, -10), movSpeed * Time.deltaTime);
+        //transform.position = Vector3.Slerp(transform.position, new Vector3(target.transform.position.x, target.transform.position.y, -10), movSpeed * Time.deltaTime);
     }
 
     public void FollowPlayer(GameObject player)
     {
-        target = player;
+        //target = player;
     }
 
 }

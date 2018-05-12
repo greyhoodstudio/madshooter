@@ -5,11 +5,14 @@ using UnityEngine.SceneManagement;
 
 public class ClientManager : MonoBehaviour {
 
-    public static string playerName;
+    public static string playerName; 
     public static int playerId;
 
     public static Dictionary<int, PlayerInfo> playerList;
     public GameObject myPlayer;
+
+    public static GameStartEvent gameStartEvent; //preload gameStartEvent
+
 
     // Input variables
     private float axisX;
@@ -50,22 +53,22 @@ public class ClientManager : MonoBehaviour {
     void OnGameStart(Scene scene, LoadSceneMode mode)
     {
         if (scene.buildIndex == 1)
+        {
+            foreach (NewPlayerEvent npe in gameStartEvent.PlayerList)
+            { 
+                //set player hashtable
+                GameObject player = Instantiate(Resources.Load("Prefabs/Player")) as GameObject;
+                playerId = npe.PlayerId; //myPlayerId
+                playerList.Add(npe.PlayerId, player.GetComponent<PlayerInfo>());
+            }
+
             StartCoroutine("SendInputData");
+        }
     }
     
-    public static void StartGame (GameStartEvent gameStartEvent)
+    public static void StartGame (GameStartEvent _gameStartEvent)
     {
-
-        foreach(NewPlayerEvent npe in gameStartEvent.PlayerList){
-            PlayerInfo temp = new PlayerInfo();
-            temp.playerId = npe.PlayerId;
-            temp.playerHealth = 100;
-            playerList.Add(temp.playerId, temp);
-        }
-
-        NewPlayerEvent myPlayerInfo = gameStartEvent.PlayerList[0];
-        playerName = myPlayerInfo.PlayerName;
-        playerId = myPlayerInfo.PlayerId;
+        gameStartEvent =_gameStartEvent;
         SceneManager.LoadScene(1);
         return;
     }
@@ -103,17 +106,13 @@ public class ClientManager : MonoBehaviour {
     }
 
     public static void UpdatePlayer (InputData input)
-    {        
-        return;
-    }
-    
-    public static void UpdateBullet (InputData input)
     {
-        return;
-    }
-
-	public static void CreateMyPlayer()
-    {
+        if (playerList.ContainsKey(input.player_id))
+        {
+            MovementController p = playerList[input.player_id].GetComponent<MovementController>();
+            p.axisX = input.axis_x;
+            p.axisY = input.axis_y;
+        }
         return;
     }
 }

@@ -24,7 +24,6 @@ public class ButtonHandler : MonoBehaviour {
 
     private void OnEnable()
     {
-
         EventManager.OnConnectToEventSocket += OnEventSocketConnected;
         EventManager.OnConnectToInputSocket += OnInputSocketConnected;
     }
@@ -62,7 +61,6 @@ public class ButtonHandler : MonoBehaviour {
         JsonHandler.SendGameStart(playerName);
         return;
     }
-
 
     void OnEventSocketConnected()
     {
