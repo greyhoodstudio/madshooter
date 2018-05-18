@@ -78,11 +78,13 @@ public class PlayerActionController : MonoBehaviour
 
     public void FireWeapon(int bulletId, Vector2 firePosition, Vector2 mousePosition)
     {
+        if (weaponActionController == null)
+            return;
+
         // Calculate bullet rotation
         Vector2 direction = mousePosition - firePosition;
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         Quaternion fireRotation = Quaternion.AngleAxis(angle, Vector3.forward);
-
         weaponActionController.Fire(bulletId, firePosition, fireRotation);
     }
 

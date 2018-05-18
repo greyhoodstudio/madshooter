@@ -99,14 +99,10 @@ public class ClientManager : MonoBehaviour {
         if (playerList.ContainsKey(pid))
             pInfo = playerList[pid];
         if (pInfo != null)
-        {            
-            PlayerActionController pac = pInfo.GetComponent<PlayerActionController>();
-            if (pac != null)
-            { 
-                Vector2 firePosition = new Vector2(fireEvent.FirePosX, fireEvent.FirePosY);
-                Vector2 mousePosition = new Vector2(fireEvent.MousePosX, fireEvent.MousePosY);
-                pInfo.GetComponent<PlayerActionController>().FireWeapon(fireEvent.BulletId, firePosition, mousePosition);
-            }
+        {   
+            Vector2 firePosition = new Vector2(fireEvent.FirePosX, fireEvent.FirePosY);
+            Vector2 mousePosition = new Vector2(fireEvent.MousePosX, fireEvent.MousePosY);
+            pInfo.GetComponent<PlayerActionController>().FireWeapon(fireEvent.BulletId, firePosition, mousePosition);            
         }
         return;
     }
