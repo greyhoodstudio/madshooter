@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class WeaponInfo : MonoBehaviour {
 
-    public float weaponNum { get; set; }
+    public float weaponNum;
 
     public float loadSpeed { get; set; }
     public float fireSpeed { get; set; } // 발사 사이 간격 (초)
@@ -13,8 +13,7 @@ public class WeaponInfo : MonoBehaviour {
     public int loadBulletCnt { get; set; }  // 장전탄환갯수
     public Sprite sprite;
     public int status { get; set; } //무기의 상태 1:get 2:drop
-
-
+    
     // Use this for initialization
     void Start(){
 

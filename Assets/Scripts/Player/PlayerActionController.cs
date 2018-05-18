@@ -9,12 +9,13 @@ public class PlayerActionController : MonoBehaviour
     public Equipment equipment;
     public PlayerInfo playerInfo;
     public MovementController movementController;
-    public WeaponActionController weaponActionController;
-    public WeaponInfo weaponInfo;
+
+    public WeaponActionController weaponActionController = null;
+    public WeaponInfo weaponInfo = null;
 
     // Variables
     public bool isFiring;
-    public bool fireLock;
+    public bool fireLock = true;
 
     public bool isItem; //아이템에 충돌했는가.
     private GameObject item; // 주변 아이템

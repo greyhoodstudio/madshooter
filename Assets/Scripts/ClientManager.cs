@@ -56,10 +56,12 @@ public class ClientManager : MonoBehaviour {
     {
         if (scene.buildIndex == 1)
         {
-            for (int i = 0; i < gameStartEvent.PlayerList.Count; i++)
+            List<NewPlayerEvent> players = gameStartEvent.PlayerList;
+
+            for (int i = 0; i < players.Count; i++)
             {
                 //set player hashtable
-                NewPlayerEvent npe = gameStartEvent.PlayerList[i];
+                NewPlayerEvent npe = players[i];
                 GameObject player = Instantiate(Resources.Load("Prefabs/Player")) as GameObject;
                 playerList.Add(npe.PlayerId, player.GetComponent<PlayerInfo>());
                 if (i == 0)
@@ -97,10 +99,14 @@ public class ClientManager : MonoBehaviour {
         if (playerList.ContainsKey(pid))
             pInfo = playerList[pid];
         if (pInfo != null)
-        {
-            Vector2 firePosition = new Vector2(fireEvent.FirePosX, fireEvent.FirePosY);
-            Vector2 mousePosition = new Vector2(fireEvent.MousePosX, fireEvent.MousePosY);
-            pInfo.GetComponent<PlayerActionController>().FireWeapon(fireEvent.BulletId, firePosition, mousePosition);
+        {            
+            PlayerActionController pac = pInfo.GetComponent<PlayerActionController>();
+            if (pac != null)
+            { 
+                Vector2 firePosition = new Vector2(fireEvent.FirePosX, fireEvent.FirePosY);
+                Vector2 mousePosition = new Vector2(fireEvent.MousePosX, fireEvent.MousePosY);
+                pInfo.GetComponent<PlayerActionController>().FireWeapon(fireEvent.BulletId, firePosition, mousePosition);
+            }
         }
         return;
     }
@@ -125,10 +131,11 @@ public class ClientManager : MonoBehaviour {
 
     public static void HandleNewPlayerEvent(NewPlayerEvent _newPlayerEvent){
 
-        if (playerList.ContainsKey(_newPlayerEvent.PlayerId))
+        int newPlayerId = _newPlayerEvent.PlayerId;
+        if (playerList.ContainsKey(newPlayerId))
             return;
+
         GameObject player = Instantiate(Resources.Load("Prefabs/Player")) as GameObject;
-        // player.transform.position = new Vector3(30,30,1);
-        playerList.Add(_newPlayerEvent.PlayerId, player.GetComponent<PlayerInfo>());
+        playerList.Add(newPlayerId, player.GetComponent<PlayerInfo>());
     }
 }

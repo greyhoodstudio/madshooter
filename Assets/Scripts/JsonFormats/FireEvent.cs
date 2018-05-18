@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class FireEvent {
 
@@ -15,10 +16,10 @@ public class FireEvent {
     {
         PlayerId = pid;
         BulletId = bid;
-        FirePosX = firePos.x;
-        FirePosY = firePos.y;
-        MousePosX = MousePos.x;
-        MousePosY = MousePos.y;
+        FirePosX = (float)Math.Round(firePos.x, 4);
+        FirePosY = (float)Math.Round(firePos.y, 4);
+        MousePosX = (float)Math.Round(MousePos.x, 4);
+        MousePosY = (float)Math.Round(MousePos.y, 4);
     }
 
 }

@@ -33,7 +33,7 @@ public class Equipment : MonoBehaviour {
     public void EquipWeapon(GameObject weapon) //장비 sprite
     {
         //equipmentRenderer = handEquip;
-        currWeapon = weapon;
+        currWeapon = weapon;        
         weapon.transform.SetParent(equipmentRenderer.transform);
         //inventory.weapons[inventory.weapons.Count-1];
         equipmentRenderer.ChangeSprite(currWeapon.GetComponent<SpriteRenderer>().sprite);
