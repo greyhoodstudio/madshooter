@@ -16,8 +16,6 @@ public class PlayerActionController : MonoBehaviour
     public bool isFiring;
     public bool isItem; //아이템에 충돌했는가.
 
-    private GameObject weapon;
-
     private bool dodgeInput;
     public bool isDodging { get; set; }
 
@@ -33,12 +31,10 @@ public class PlayerActionController : MonoBehaviour
         inventory = GetComponent<Inventory>();
         playerInfo = GetComponent<PlayerInfo>();
         movementController = GetComponent<MovementController>();
-       
+
         //init Basic weapon
-        weapon = Instantiate(Resources.Load("Prefabs/TempItem")) as GameObject;
-        weapon.transform.SetPositionAndRotation(transform.position, Quaternion.identity);
         equipWeapon();
-        weapon.transform.SetParent(playerInfo.transform.parent);
+        // weapon.transform.SetParent(playerInfo.transform.parent);
 
         // Initialize variables
         isDodging = false;
@@ -48,9 +44,7 @@ public class PlayerActionController : MonoBehaviour
 	// Update is called once per frame
     void Update()
     {
-        // Update weapon transform
-        weapon.transform.SetPositionAndRotation(transform.position, Quaternion.identity);
-        
+
     //    Item Pick Up
     //    if (Input.GetKeyDown(KeyCode.F) && isItem)
     //    {
@@ -88,13 +82,11 @@ public class PlayerActionController : MonoBehaviour
     
     public void equipWeapon(){ //아이템 장착(after server)  
 
-        inventory.EquipWeapon(weapon);
-        inventory.weapons.Add(weaponInfo);
-        
-        // weaponActionController.equipmentRenderer = equipment.equipmentRenderer;
-
-        weaponInfo = weapon.GetComponent<WeaponInfo>();
-        weaponActionController = weapon.GetComponent<WeaponActionController>();
+        inventory.EquipWeapon(weaponInfo);
+        //inventory.weapons.Add(weaponInfo);
+        //weaponActionController.equipmentRenderer = equipment.equipmentRenderer;
+        weaponInfo = inventory.currentWeapon;
+        weaponActionController = GetComponentInChildren<WeaponActionController>();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

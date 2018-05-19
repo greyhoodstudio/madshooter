@@ -11,19 +11,28 @@ public class Inventory : MonoBehaviour {
     public SpriteRenderer weaponSpriteRenderer;
 
     public List<WeaponInfo> weapons; // List of weapons in inventory
+    public WeaponActionController weaponActionController = null;
     
+	private void Awake()
+	{
+        
+	}
 
-    // Use this for initialization
-    void Start () {
-
+	// Use this for initialization
+	void Start () {
         // Initialize references
+        /* 프로토타입용 기본 무기 설정*/
+        currentWeapon = new WeaponInfo(1, 1, (Sprite)Resources.Load("BasicSprites/MagnetSprite", typeof(Sprite)),0.5f);
+        weaponActionController = new WeaponActionController();
         weaponSpriteRenderer = transform.GetChild(0).GetComponent<SpriteRenderer>();
-
     }
 
-    public void EquipWeapon(GameObject weapon)
+    public void EquipWeapon(WeaponInfo weapon)
     {
-        currentWeapon = weapon.GetComponent<WeaponInfo>();
-        weaponSpriteRenderer.sprite = currentWeapon.sprite;        
+        //currentWeapon = weapon;
+        //weaponSpriteRenderer.sprite = currentWeapon.weaponSprite;
+
+        weaponSpriteRenderer.sprite = currentWeapon.weaponSprite;
+        weapons.Add(currentWeapon);
     }
 }

@@ -137,7 +137,7 @@ public class ClientManager : MonoBehaviour {
         int newMapId = cEvent.MapId;
 
         if (newMapId == currentMapId) //현재 맵에 새로운 유저 접속 시
-        {            
+        {
             int newPlayerNum = cEvent.ConnectInfos[0].PlayerNum;
             if (playerList.ContainsKey(newPlayerNum)) return;
 
@@ -150,16 +150,21 @@ public class ClientManager : MonoBehaviour {
             connectEvent = cEvent;
             currentMapId = newMapId;
             SceneManager.LoadScene(1);
-        }        
+        }
+        //foreach (ConnectInfo f in cEvent.ConnectInfos)
+        //{
+        //    if (playerList.ContainsKey(f.PlayerNum)) break;
+        //    GameObject player = Instantiate(Resources.Load("Prefabs/Player")) as GameObject;
+        //    playerList.Add(f.PlayerNum, player.GetComponent<PlayerInfo>());
+        //}
     }
-
     // 씬이 로드 되었을 때 실행
     void OnGameStart(Scene scene, LoadSceneMode mode){
 
         if (scene.buildIndex == 1){
 
             List<ConnectInfo> players = connectEvent.ConnectInfos; // 미리 저장해둔 ConnectEvent에서 게임 내 플레이어 정보 호출
-
+            Debug.Log("players list :"+players.Count);
             for (int i = 0; i < players.Count; i++)
             {
                 //set player dictionary

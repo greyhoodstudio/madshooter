@@ -18,11 +18,6 @@ public class BulletActionController : MonoBehaviour {
         myRigidbody2D.velocity = transform.right * bulletInfo.bulletSpeed;
     }
     
-    private void OnDestroy()
-    {
-        ClientManager.bulletList.Remove(bulletInfo.bulletNum);
-    }
-
     // Update is called once per frame
     void Update () {
 		

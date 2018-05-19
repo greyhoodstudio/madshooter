@@ -20,7 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4404990984642892}
   - component: {fileID: 212511046083762984}
-  - component: {fileID: 114083979913619058}
+  - component: {fileID: 114313505698424166}
   m_Layer: 0
   m_Name: HandEquip
   m_TagString: Untagged
@@ -112,18 +112,6 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.3
---- !u!114 &114083979913619058
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1424648976990860}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 82ec4a58799874037a62358691a3aa63, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  spriteRenderer: {fileID: 212511046083762984}
 --- !u!114 &114129359603217848
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -152,6 +140,19 @@ MonoBehaviour:
   playerInfo: {fileID: 0}
   axisX: 0
   axisY: 0
+--- !u!114 &114313505698424166
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1424648976990860}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a1b748931a78bf4688366f5a617a2d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletPrefab: {fileID: 0}
+  weaponInfo: {fileID: 0}
 --- !u!114 &114430414812651712
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -166,6 +167,8 @@ MonoBehaviour:
   currentWeapon: {fileID: 0}
   weaponSpriteRenderer: {fileID: 0}
   weapons: []
+  weaponActionController: {fileID: 0}
+  weaponInfo: {fileID: 0}
 --- !u!114 &114869476999246534
 MonoBehaviour:
   m_ObjectHideFlags: 1

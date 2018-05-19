@@ -12,13 +12,18 @@ public class WeaponInfo : MonoBehaviour {
     public int durability; // 내구도
     public float range; // 사정거리: 총알 생성 후 파괴되기까지의 시간
     public int loadBulletCnt; // 장전탄환갯수
-    public Sprite sprite;
+    public Sprite weaponSprite;
     public int status; //무기의 상태 1:get 2:drop
     public int playerId;
     public int bulletId;//장착된 총알타입
     public float x, y;
     
-    
+    public WeaponInfo(int wId, float wNum, Sprite sprite,float bulletRange){
+        weaponId = wId;
+        weaponNum = wNum;
+        weaponSprite = sprite;
+        range = bulletRange;
+    }
 
     // Use this for initialization
     void Start(){

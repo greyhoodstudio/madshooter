@@ -13,7 +13,7 @@ public class WeaponActionController : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
-        weaponInfo = GetComponent<WeaponInfo>();
+        weaponInfo = GetComponentInParent<Inventory>().currentWeapon;
     }
 	
 	// Update is called once per frame
@@ -22,14 +22,27 @@ public class WeaponActionController : MonoBehaviour {
 	}
 
     public void Fire(int bulletId, Vector2 firePosition, Quaternion fireRotation) {
-        GameObject bullet = Instantiate(bulletPrefab, firePosition, fireRotation);
-        bullet.GetComponent<BulletInfo>().bulletNum = bulletId;
-        ClientManager.bulletList.Add(bulletId, bullet.GetComponent<BulletInfo>());
-        Debug.Log("fire");
-        Destroy(bullet, weaponInfo.range);        
+
+        StartCoroutine(FireCoroutine(bulletId, firePosition, fireRotation));
+                
     }
     
     public void reload(){
         
+    }
+
+    IEnumerator FireCoroutine (int bulletId, Vector2 firePosition, Quaternion fireRotation)
+    {
+        bulletPrefab = Resources.Load("Prefabs/BasicBullet") as GameObject;
+        GameObject bullet = Instantiate(bulletPrefab, firePosition, fireRotation);
+        ClientManager.bulletList.Add(bulletId, bullet.GetComponent<BulletInfo>());
+
+        bullet.GetComponent<BulletInfo>().bulletNum = bulletId;        
+        Debug.Log("fire :" + weaponInfo.range);
+
+        yield return new WaitForSeconds(weaponInfo.range);
+
+        ClientManager.bulletList.Remove(bulletId);
+        Destroy(bullet, weaponInfo.range);
     }
 }

@@ -8,6 +8,7 @@ TagManager:
   - Dodge
   - Item
   - Monster
+  - TempItem
   layers:
   - Default
   - TransparentFX
