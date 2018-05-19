@@ -6,13 +6,14 @@ using UnityEngine.SceneManagement;
 public class ClientManager : MonoBehaviour {
 
     // 플레이어 정보
-    public static string playerName; 
-    public static int playerNum;
+    public static string myPlayerName; 
+    public static int myPlayerNum;
     public GameObject myPlayer;
 
     // 맵 전체 오브젝트 목록
     public static Dictionary<int, PlayerInfo> playerList;
     public static Dictionary<int, WeaponInfo> weaponList;
+    public static Dictionary<int, BulletInfo> bulletList;
 
     // 맵 정보
     public static int currentMapId = 0;
@@ -53,7 +54,7 @@ public class ClientManager : MonoBehaviour {
         // Get Left Mouse Input
         if (Input.GetMouseButton(0) && !fireLock) // Do not fire if fire is on cooldown
         {
-            JsonHandler.SendFireEvent(playerNum, myPlayer.transform.GetChild(0).transform.position, mousePosition, 1, 1);
+            JsonHandler.SendFireEvent(myPlayerNum, myPlayer.transform.GetChild(0).transform.position, mousePosition, 1, 1);
             StartCoroutine("FireLock");
         }
 
@@ -90,6 +91,11 @@ public class ClientManager : MonoBehaviour {
 
     public static void HandleDodgeEvent(InputData iData)
     {
+        if (playerList.ContainsKey(iData.PlayerNum))
+        {
+            PlayerActionController p = playerList[iData.PlayerNum].GetComponent<PlayerActionController>();
+            p.TriggerDodge();
+        }
         return;
     }
 
@@ -103,9 +109,27 @@ public class ClientManager : MonoBehaviour {
         {
             Vector2 firePosition = new Vector2(fireEvent.PositionX, fireEvent.PositionY);
             Vector2 mousePosition = new Vector2(fireEvent.MouseX, fireEvent.MouseY);
-            pInfo.GetComponent<PlayerActionController>().FireWeapon(fireEvent.BulletNum, firePosition, mousePosition);
+            pInfo.GetComponent<PlayerActionController>().FireWeapon(fireEvent.BulletNum, firePosition, mousePosition);            
         }
         return;
+    }
+
+    public static void HandleHitEvent (HitEvent hitEvent)
+    {        
+        switch (hitEvent.EventType)
+        {
+            case '1':
+                PlayerInfo hitPlayer = playerList[hitEvent.PlayerNum];
+                BulletInfo hitBullet = bulletList[hitEvent.BulletNum];
+                hitPlayer.playerHealth -= hitBullet.bulletDamage;
+                Destroy(hitBullet.gameObject);
+                break;
+            case '2':
+                Destroy(playerList[hitEvent.PlayerNum].gameObject);
+                break;
+            default:
+                break;
+        }
     }
 
     public static void HandleConnectEvent(ConnectEvent cEvent)
@@ -118,6 +142,7 @@ public class ClientManager : MonoBehaviour {
             if (playerList.ContainsKey(newPlayerNum)) return;
 
             GameObject player = Instantiate(Resources.Load("Prefabs/Player")) as GameObject;
+            player.GetComponent<PlayerInfo>().playerNum = newPlayerNum;
             playerList.Add(newPlayerNum, player.GetComponent<PlayerInfo>());
         }
         else // 신규 맵에 접속 시
@@ -139,14 +164,16 @@ public class ClientManager : MonoBehaviour {
             {
                 //set player dictionary
                 ConnectInfo cInfo = players[i];
+                int newPlayerNum = cInfo.PlayerNum;
                 GameObject player = Instantiate(Resources.Load("Prefabs/Player")) as GameObject;
+                player.GetComponent<PlayerInfo>().playerNum = newPlayerNum;
                 //TODO: player 위치 설정
-                playerList.Add(cInfo.PlayerNum, player.GetComponent<PlayerInfo>());
+                playerList.Add(newPlayerNum, player.GetComponent<PlayerInfo>());
                 
                 if (i == 0) // 나의 플레이어 정보 저장
                 {
-                    playerNum = cInfo.PlayerNum; //myPlayerId
-                    Debug.Log("My player number: " + playerNum);
+                    myPlayerNum = newPlayerNum; //myPlayerId
+                    Debug.Log("My player number: " + myPlayerNum);
                     myPlayer = player; //my player object
                 }
             }
@@ -162,7 +189,7 @@ public class ClientManager : MonoBehaviour {
     {
         while (NetworkManager.inputSocketReady)
         {
-            JsonHandler.SendInputData(playerNum, axisX, axisY, myPlayer.transform.position, mousePosition);
+            JsonHandler.SendInputData(myPlayerNum, axisX, axisY, myPlayer.transform.position, mousePosition);
             yield return new WaitForSeconds(0.1f);
         }
     }

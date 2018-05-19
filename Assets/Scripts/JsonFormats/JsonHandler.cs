@@ -29,7 +29,7 @@ public class JsonHandler {
             case '3': // 피격, 사망
                 HitEvent hitEvent = JsonUtility.FromJson<HitEvent>(json.Substring(1));
                 Debug.Log("Event Socket parsing result: " + hitEvent);
-                //TODO
+                ClientManager.HandleHitEvent(hitEvent);
                 break;
             case '4': // 접속 정보
                 ConnectEvent connectEvent = JsonUtility.FromJson<ConnectEvent>(json.Substring(1));

@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class BulletInfo : MonoBehaviour {
 
-    public int bulletId { get; set; }
+    public int bulletNum { get; set; }
+
     public float bulletSpeed { get; set; }
     public float bulletTime { get; set; }
     public float bulletDamage { get; set; }

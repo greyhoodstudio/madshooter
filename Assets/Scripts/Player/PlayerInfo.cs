@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerInfo : MonoBehaviour {
 
     // Variables
-    public int playerId;
+    public int playerNum;
 
     public float playerHealth { get; set; }
     public float dodgeDistance { get; set; }
@@ -25,7 +25,7 @@ public class PlayerInfo : MonoBehaviour {
 	void Update () {
 		if (playerHealth <= 0)
         {
-            Debug.Log("Player " + playerId.ToString() + "Dead");
+            Debug.Log("Player " + playerNum.ToString() + "Dead");
             // TODO 죽는 애니메이션
         }
 	}

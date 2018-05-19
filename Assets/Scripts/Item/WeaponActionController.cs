@@ -14,7 +14,6 @@ public class WeaponActionController : MonoBehaviour {
     void Start()
     {
         weaponInfo = GetComponent<WeaponInfo>();
-        bulletPrefab = Instantiate(Resources.Load("Prefabs/BasicBullet")) as GameObject;
     }
 	
 	// Update is called once per frame
@@ -24,11 +23,12 @@ public class WeaponActionController : MonoBehaviour {
 
     public void Fire(int bulletId, Vector2 firePosition, Quaternion fireRotation) {
         GameObject bullet = Instantiate(bulletPrefab, firePosition, fireRotation);
-        bullet.GetComponent<BulletInfo>().bulletId = bulletId;
+        bullet.GetComponent<BulletInfo>().bulletNum = bulletId;
+        ClientManager.bulletList.Add(bulletId, bullet.GetComponent<BulletInfo>());
         Debug.Log("fire");
-        Destroy(bullet, weaponInfo.range);
+        Destroy(bullet, weaponInfo.range);        
     }
-
+    
     public void reload(){
         
     }

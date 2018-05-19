@@ -50,14 +50,7 @@ public class PlayerActionController : MonoBehaviour
     {
         // Update weapon transform
         weapon.transform.SetPositionAndRotation(transform.position, Quaternion.identity);
-
-        // Dodge
-        dodgeInput = Input.GetMouseButton(1);
-        if (dodgeInput && !isDodging)
-        {
-            StartCoroutine("Dodge");
-        }
-
+        
     //    Item Pick Up
     //    if (Input.GetKeyDown(KeyCode.F) && isItem)
     //    {
@@ -104,7 +97,17 @@ public class PlayerActionController : MonoBehaviour
         weaponActionController = weapon.GetComponent<WeaponActionController>();
     }
 
-	private void OnTriggerStay2D(Collider2D other)
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        GameObject other = collision.gameObject;
+
+        if ((other.tag == "Bullet") &&  (playerInfo.playerNum == ClientManager.myPlayerNum))
+        {
+            JsonHandler.SendHitEvent(playerInfo.playerNum, other.GetComponent<BulletInfo>().bulletNum);
+        }
+    }
+
+    private void OnTriggerStay2D(Collider2D other)
 	{
         if(other.gameObject.tag=="Item"){
             isItem = true;
