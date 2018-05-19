@@ -18,8 +18,9 @@ public class PlayerActionController : MonoBehaviour
     public bool fireLock = true;
 
     public bool isItem; //아이템에 충돌했는가.
-    private GameObject item; // 주변 아이템
-    
+    //private GameObject item; // 주변 아이템
+    private GameObject weapon; // for rendering
+
     private bool dodgeInput;
     public bool isDodging { get; set; }
 
@@ -36,15 +37,18 @@ public class PlayerActionController : MonoBehaviour
         equipment = GetComponent<Equipment>();
         playerInfo = GetComponent<PlayerInfo>();
         movementController = GetComponent<MovementController>();
-        // weaponActionController = equipment.currWeapon.GetComponent<WeaponActionController>(); //FIXED.
-        // weaponActionController.equipmentPart = equipment.equipmentRenderer; //FIXED
-        // weaponInfo = equipment.currWeapon.GetComponent<WeaponInfo>();
-        
+       
+        //init Basic weapon
+        weapon = Instantiate(Resources.Load("Prefabs/TempItem")) as GameObject;
+        weapon.transform.SetPositionAndRotation(transform.position, Quaternion.identity);
+        //weaponInfo = weapon.GetComponent<WeaponInfo>(); 
+        //weaponActionController = weapon.GetComponent<WeaponActionController>();
+        equipWeapon();
+
         // Initialize variables
         isDodging = false;
         isItem = false;
         fireLock = false;
-        
 	}
 	
 	// Update is called once per frame
@@ -57,23 +61,23 @@ public class PlayerActionController : MonoBehaviour
         //     weaponActionController.Fire();
         //     StartCoroutine("FireLock");
         // }
-
+        weapon.transform.SetPositionAndRotation(transform.position, Quaternion.identity);
         // Dodge
         dodgeInput = Input.GetMouseButton(1);
-        if (dodgeInput && !isDodging) {
+        if (dodgeInput && !isDodging){
             StartCoroutine("Dodge");
         }
 
-        // Item Pick Up
-        if (Input.GetKeyDown(KeyCode.F) && isItem)
-        {
-            Debug.Log("getStartItem");
-            inventory.weapons.Add(item);
-            equipItem();
-            item.SetActive(false);
-            isItem = false;
-            //Destroy(item);
-        }
+    //    Item Pick Up
+    //    if (Input.GetKeyDown(KeyCode.F) && isItem)
+    //    {
+    //        Debug.Log("getStartItem");
+    //        inventory.weapons.Add(weapon);
+    //        equipWeapon();
+    //        //weapon.SetActive(false);
+    //        isItem = false;
+    //        //Destroy(item);
+    //    }
     }
 
     public void FireWeapon(int bulletId, Vector2 firePosition, Vector2 mousePosition)
@@ -88,17 +92,20 @@ public class PlayerActionController : MonoBehaviour
         weaponActionController.Fire(bulletId, firePosition, fireRotation);
     }
 
-    void equipItem(){
-        equipment.EquipWeapon(item);
-        weaponActionController = equipment.currWeapon.GetComponent<WeaponActionController>();
+    public void equipWeapon(){ //아이템 장착(after server)  
+        equipment.EquipWeapon(weapon);
+        inventory.weapons.Add(weaponInfo);
+        //weaponActionController = equipment.currWeapon.GetComponent<WeaponActionController>();
         weaponActionController.equipmentRenderer = equipment.equipmentRenderer;
-        weaponInfo = equipment.currWeapon.GetComponent<WeaponInfo>();             
+
+        //weaponInfo = equipment.currWeapon.GetComponent<WeaponInfo>();
+        weaponInfo = weapon.GetComponent<WeaponInfo>(); //
+        weaponActionController = weapon.GetComponent<WeaponActionController>();
     }
 
 	private void OnTriggerStay2D(Collider2D other)
 	{
         if(other.gameObject.tag=="Item"){
-            item = other.gameObject;
             isItem = true;
         }
 	}

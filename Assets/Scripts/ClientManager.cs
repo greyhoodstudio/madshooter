@@ -8,31 +8,27 @@ public class ClientManager : MonoBehaviour {
     public static string playerName; 
     public static int playerId;
     public GameObject myPlayer;
-
     public static Dictionary<int, PlayerInfo> playerList;
-    
+    public static Dictionary<int, WeaponInfo> weaponList;
 
     //preload gameStartEvent
-    public static GameStartEvent gameStartEvent; 
-
+    public static GameStartEvent gameStartEvent;
 
     // Input variables
     private float axisX;
     private float axisY;
     private Vector2 mousePosition;
     private bool LeftMouseClicked = false;
+    private bool ItemPickBtnClicked = false; 
     private bool fireLock = false;
 
-
-    private void Start()
-    {
+    private void Start(){
         playerList = new Dictionary<int, PlayerInfo>();
         SceneManager.sceneLoaded += OnGameStart;
         DontDestroyOnLoad(this);
     }
 
-    void Update()
-    {
+    void Update(){
         // Get WASD input
         axisX = Input.GetAxis("Horizontal");
         axisY = Input.GetAxis("Vertical");
@@ -43,19 +39,21 @@ public class ClientManager : MonoBehaviour {
 
         // Get Mouse Position
         LeftMouseClicked = Input.GetMouseButton(0);
-        if (LeftMouseClicked && !fireLock)
-        {
+        if (LeftMouseClicked && !fireLock){
             mousePosition = (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            JsonHandler.SendFireEvent(playerId, -1, myPlayer.transform.GetChild(0).transform.position, mousePosition);
+            JsonHandler.SendFireEvent(playerId, -1, myPlayer.transform.GetChild(0).transform.position, mousePosition, 1, 1); //weaponId, bulletNm
+            Debug.Log("fire");
             StartCoroutine("FireLock");
-        }        
-        
+        }
+
+        ItemPickBtnClicked = Input.GetKeyDown(KeyCode.F);
+        if(ItemPickBtnClicked){
+            JsonHandler.SendCommonEvent(playerId, -1, 1);
+        }
     }
 
-    void OnGameStart(Scene scene, LoadSceneMode mode)
-    {
-        if (scene.buildIndex == 1)
-        {
+    void OnGameStart(Scene scene, LoadSceneMode mode){
+        if (scene.buildIndex == 1){
             List<NewPlayerEvent> players = gameStartEvent.PlayerList;
 
             for (int i = 0; i < players.Count; i++)
@@ -71,53 +69,45 @@ public class ClientManager : MonoBehaviour {
                     myPlayer = player; //my player object
                 }
             }
-
             StartCoroutine("SendInputData");
         }
     }
     
-    public static void StartGame (GameStartEvent _gameStartEvent)
-    {
+    public static void StartGame (GameStartEvent _gameStartEvent){
         gameStartEvent = _gameStartEvent;
         SceneManager.LoadScene(1);
         return;
     }
 
-    IEnumerator SendInputData()
-    {
-        while (NetworkManager.inputSocketReady)
-        {
+    IEnumerator SendInputData(){
+        while (NetworkManager.inputSocketReady){
             JsonHandler.SendInputData(playerId, axisX, axisY);
             yield return new WaitForSeconds(0.1f);
         }
     }
 
-    public static void HandleFireEvent (FireEvent fireEvent)
-    {
+    public static void HandleFireEvent (FireEvent fireEvent){
         PlayerInfo pInfo = null;
-        int pid = fireEvent.PlayerId;
+        int pid = fireEvent.PlayerNum;
         if (playerList.ContainsKey(pid))
             pInfo = playerList[pid];
         if (pInfo != null)
         {   
-            Vector2 firePosition = new Vector2(fireEvent.FirePosX, fireEvent.FirePosY);
-            Vector2 mousePosition = new Vector2(fireEvent.MousePosX, fireEvent.MousePosY);
+            Vector2 firePosition = new Vector2(fireEvent.PositionX, fireEvent.PositionY);
+            Vector2 mousePosition = new Vector2(fireEvent.MouseX, fireEvent.MouseY);
             pInfo.GetComponent<PlayerActionController>().FireWeapon(fireEvent.BulletId, firePosition, mousePosition);            
         }
         return;
     }
 
-    IEnumerator FireLock()
-    {
+    IEnumerator FireLock(){
         fireLock = true;
         yield return new WaitForSeconds(0.3f);
         fireLock = false;
     }
 
-    public static void UpdatePlayer (InputData input)
-    {
-        if (playerList.ContainsKey(input.player_id))
-        {
+    public static void UpdatePlayer (InputData input){
+        if (playerList.ContainsKey(input.player_id)){
             MovementController p = playerList[input.player_id].GetComponent<MovementController>();
             p.axisX = input.axis_x;
             p.axisY = input.axis_y;
@@ -126,12 +116,28 @@ public class ClientManager : MonoBehaviour {
     }
 
     public static void HandleNewPlayerEvent(NewPlayerEvent _newPlayerEvent){
-
         int newPlayerId = _newPlayerEvent.PlayerId;
         if (playerList.ContainsKey(newPlayerId))
             return;
 
         GameObject player = Instantiate(Resources.Load("Prefabs/Player")) as GameObject;
         playerList.Add(newPlayerId, player.GetComponent<PlayerInfo>());
+    }
+
+    public static void HandleCommonEvent(CommonEvent commonEvent){
+        int eventType = commonEvent.EventType;
+        switch (eventType){
+            case 1: //회피
+                break;
+            case 2: //피격
+                break;
+            case 3: //재장전
+                break;
+            case 4: //아이템습득
+                playerList[commonEvent.PlayerId].GetComponent<PlayerActionController>().weaponInfo = weaponList[commonEvent.ObjectId];
+                break;
+            case 5: //아이템버림
+                break;
+        }
     }
 }

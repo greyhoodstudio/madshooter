@@ -20,6 +20,7 @@ public class JsonHandler {
             case '2':
                 CommonEvent commonEvent = JsonUtility.FromJson<CommonEvent>(json.Substring(1));
                 Debug.Log("Event Socket parsing result: " + commonEvent);
+                ClientManager.HandleCommonEvent(commonEvent);
                 break;
             case '3':
                 NewPlayerEvent newPlayerEvent = JsonUtility.FromJson<NewPlayerEvent>(json.Substring(1));
@@ -94,12 +95,33 @@ public class JsonHandler {
         return;
     }
 
-    public static void SendFireEvent (int pid, int bid, Vector2 firePos, Vector2 MousePos)
+    public static void SendFireEvent (int pid, int bid, Vector2 firePos, Vector2 MousePos, int WeaponId, int BulletNm)
     {
-        string newJson = "5" + JsonUtility.ToJson(new FireEvent(pid, bid, firePos, MousePos));
+        string newJson = "5" + JsonUtility.ToJson(new FireEvent(pid, bid, firePos, MousePos, WeaponId, BulletNm));
         Debug.Log("FireEvent message created: " + newJson);
         NetworkManager.writeEventSocket(newJson);
         Debug.Log("FireEvent message sent.");
+        return;
+    }
+
+    public static void SendCommonEvent(int eventType, int playerId, int objectId)
+    {
+        string newJson = "";
+        switch(eventType){
+            case 1:  //회피
+                break;
+            case 2: //피격
+                break;
+            case 3: //재장전
+                break;
+            case 4: //아이템습득
+                newJson = "2" + JsonUtility.ToJson(new CommonEvent(eventType, playerId, objectId));
+                break;
+            case 5: //아이템버림
+                break;
+        }
+        NetworkManager.writeEventSocket(newJson);
+        Debug.Log("CommonEvent message sent.");
         return;
     }
 }

@@ -8,7 +8,7 @@ public class Inventory : MonoBehaviour {
     // public ItemManager itemManager;
 
     // Variables
-    public List<GameObject> weapons; // List of weapons in inventory
+    public List<WeaponInfo> weapons; // List of weapons in inventory
 
     private void Awake() {
         
