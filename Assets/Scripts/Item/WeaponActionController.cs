@@ -35,6 +35,7 @@ public class WeaponActionController : MonoBehaviour {
     {
         bulletPrefab = Resources.Load("Prefabs/BasicBullet") as GameObject;
         GameObject bullet = Instantiate(bulletPrefab, firePosition, fireRotation);
+
         ClientManager.bulletList.Add(bulletId, bullet.GetComponent<BulletInfo>());
 
         bullet.GetComponent<BulletInfo>().bulletNum = bulletId;        

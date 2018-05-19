@@ -35,6 +35,8 @@ public class ClientManager : MonoBehaviour {
     private void Start()
     {
         playerList = new Dictionary<int, PlayerInfo>();
+        weaponList = new Dictionary<int, WeaponInfo>();
+        bulletList = new Dictionary<int, BulletInfo>();
         SceneManager.sceneLoaded += OnGameStart;
         DontDestroyOnLoad(this);
     }
