@@ -13,8 +13,8 @@ public class WeaponActionController : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
-        weaponInfo = GetComponent<WeaponInfo>();
-        bulletPrefab = Instantiate(Resources.Load("Prefabs/BasicBullet")) as GameObject;
+        weaponInfo = GetComponentInParent<PlayerActionController>().weaponInfo;
+        //bulletPrefab = Instantiate(Resources.Load("Prefabs/BasicBullet")) as GameObject;
     }
 	
 	// Update is called once per frame
@@ -23,9 +23,10 @@ public class WeaponActionController : MonoBehaviour {
 	}
 
     public void Fire(int bulletId, Vector2 firePosition, Quaternion fireRotation) {
+        bulletPrefab = Resources.Load("Prefabs/BasicBullet") as GameObject;
         GameObject bullet = Instantiate(bulletPrefab, firePosition, fireRotation);
         bullet.GetComponent<BulletInfo>().bulletId = bulletId;
-        Debug.Log("fire");
+        Debug.Log("fire :" + weaponInfo.range);
         Destroy(bullet, weaponInfo.range);
     }
 
