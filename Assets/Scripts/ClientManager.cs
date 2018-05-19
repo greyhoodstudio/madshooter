@@ -120,13 +120,14 @@ public class ClientManager : MonoBehaviour {
     {        
         switch (hitEvent.EventType)
         {
-            case '1':
+            case 1:
                 PlayerInfo hitPlayer = playerList[hitEvent.PlayerNum];
                 BulletInfo hitBullet = bulletList[hitEvent.BulletNum];
+                Debug.Log("hitBullet : " + hitBullet);
                 hitPlayer.playerHealth -= hitBullet.bulletDamage;
                 Destroy(hitBullet.gameObject);
                 break;
-            case '2':
+            case 2:
                 Destroy(playerList[hitEvent.PlayerNum].gameObject);
                 break;
             default:
