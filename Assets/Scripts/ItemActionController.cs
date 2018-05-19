@@ -8,6 +8,8 @@ public class ItemActionController : MonoBehaviour {
 	void Start () {
         // Initialize tag
         this.tag = "Item";
+        GetComponent<WeaponActionController>().weaponInfo = GetComponent<WeaponInfo>();
+
 	}
 	
 	// Update is called once per frame
@@ -18,7 +20,6 @@ public class ItemActionController : MonoBehaviour {
     // Get Item
     void getItem(){
         GetComponent<WeaponActionController>().weaponInfo.status = 1; //FIXED. enum으로 변경. 
-        
     }
 
     // Drop Item

@@ -8,11 +8,9 @@ public class HitEvent {
     public int PlayerNum;
     public int BulletNum;
 
-    public HitEvent (int type, int pnum, int bnum)
-    {
-        EventType = type;
-        PlayerNum = pnum;
-        BulletNum = bnum;
+    public HitEvent(int eType, int pNum, int bNum){
+        EventType = eType;
+        PlayerNum = pNum;
+        BulletNum = bNum;
     }
-
 }

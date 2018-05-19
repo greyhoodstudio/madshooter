@@ -10,14 +10,19 @@ public class ClientManager : MonoBehaviour {
 
     public GameObject myPlayer;
     public static Dictionary<int, PlayerInfo> playerList;
-    
+    public static Dictionary<int, WeaponInfo> weaponList;
+
     //preload gameStartEvent
-    public static GameStartEvent gameStartEvent; 
-    
+    public static GameStartEvent gameStartEvent;
+
     // Input variables
     private float axisX;
     private float axisY;
     private Vector2 mousePosition;
+
+    private bool LeftMouseClicked = false;
+    private bool ItemPickBtnClicked = false; 
+
     private bool fireLock = false;
     private bool dodgeLock = false;
 
@@ -31,8 +36,7 @@ public class ClientManager : MonoBehaviour {
         DontDestroyOnLoad(this);
     }
 
-    void Update()
-    {
+    void Update(){
         // Get WASD input
         axisX = Input.GetAxis("Horizontal");
         axisY = Input.GetAxis("Vertical");
@@ -57,12 +61,16 @@ public class ClientManager : MonoBehaviour {
             // Send Event
             StartCoroutine("DodgeLock");
         }
+
+        ItemPickBtnClicked = Input.GetKeyDown(KeyCode.F);
+        if(ItemPickBtnClicked)
+        {
+            JsonHandler.SendCommonEvent(playerId, -1, 1);
+        }
     }
 
-    void OnGameStart(Scene scene, LoadSceneMode mode)
-    {
-        if (scene.buildIndex == 1)
-        {
+    void OnGameStart(Scene scene, LoadSceneMode mode){
+        if (scene.buildIndex == 1){
             List<NewPlayerEvent> players = gameStartEvent.PlayerList;
 
             for (int i = 0; i < players.Count; i++)
@@ -78,13 +86,11 @@ public class ClientManager : MonoBehaviour {
                     myPlayer = player; //my player object
                 }
             }
-
             StartCoroutine("SendInputData");
         }
     }
     
-    public static void StartGame (GameStartEvent _gameStartEvent)
-    {
+    public static void StartGame (GameStartEvent _gameStartEvent){
         gameStartEvent = _gameStartEvent;
         SceneManager.LoadScene(1);
         return;
@@ -99,8 +105,7 @@ public class ClientManager : MonoBehaviour {
         }
     }
 
-    public static void HandleFireEvent (FireEvent fireEvent)
-    {
+    public static void HandleFireEvent (FireEvent fireEvent){
         PlayerInfo pInfo = null;
         int pid = fireEvent.PlayerNum;
         if (playerList.ContainsKey(pid))
@@ -114,8 +119,7 @@ public class ClientManager : MonoBehaviour {
         return;
     }
 
-    IEnumerator FireLock()
-    {
+    IEnumerator FireLock(){
         fireLock = true;
         yield return new WaitForSeconds(0.3f);
         fireLock = false;
@@ -156,12 +160,28 @@ public class ClientManager : MonoBehaviour {
     }
 
     public static void HandleNewPlayerEvent(NewPlayerEvent _newPlayerEvent){
-
         int newPlayerId = _newPlayerEvent.PlayerId;
         if (playerList.ContainsKey(newPlayerId))
             return;
 
         GameObject player = Instantiate(Resources.Load("Prefabs/Player")) as GameObject;
         playerList.Add(newPlayerId, player.GetComponent<PlayerInfo>());
+    }
+
+    public static void HandleCommonEvent(CommonEvent commonEvent){
+        int eventType = commonEvent.EventType;
+        switch (eventType){
+            case 1: //회피
+                break;
+            case 2: //피격
+                break;
+            case 3: //재장전
+                break;
+            case 4: //아이템습득
+                playerList[commonEvent.PlayerId].GetComponent<PlayerActionController>().weaponInfo = weaponList[commonEvent.ObjectId];
+                break;
+            case 5: //아이템버림
+                break;
+        }
     }
 }

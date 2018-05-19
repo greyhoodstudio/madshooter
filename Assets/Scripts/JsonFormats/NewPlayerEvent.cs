@@ -10,6 +10,8 @@ public class NewPlayerEvent {
     public string PlayerName;
     public int SpawnId;
     public int Items;
+    // public List<WeaponInfo> weapons;
+    // public List<Consumables> items;
 
     public NewPlayerEvent(int playerId, string playerName)
     {

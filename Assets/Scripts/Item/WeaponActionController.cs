@@ -15,6 +15,7 @@ public class WeaponActionController : MonoBehaviour {
     void Start()
     {
         weaponInfo = GetComponent<WeaponInfo>();
+        bulletPrefab = Instantiate(Resources.Load("Prefabs/BasicBullet")) as GameObject;
     }
 	
 	// Update is called once per frame

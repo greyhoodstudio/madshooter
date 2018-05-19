@@ -5,21 +5,19 @@ using UnityEngine;
 public class Equipment : MonoBehaviour {
 
     // Script References
-    public Inventory inventory;
     public EquipmentRenderer equipmentRenderer;
 
     // Variables
-    public GameObject currWeapon; // Current Weapon
+    public WeaponInfo currWeapon; // Current Weapon
 
     // Use this for initialization
     void Awake () {
-        
+       
     }
 
     void Start()
     {
         // Initialize References
-        inventory = GetComponent<Inventory>();
         equipmentRenderer = GetComponentInChildren<EquipmentRenderer>();
     }
 
@@ -30,12 +28,10 @@ public class Equipment : MonoBehaviour {
         //}
 	}
 
-    public void EquipWeapon(GameObject weapon) //장비 sprite
+    public void EquipWeapon(GameObject weapon)                //장비 sprite
     {
-        //equipmentRenderer = handEquip;
-        currWeapon = weapon;        
-        weapon.transform.SetParent(equipmentRenderer.transform);
-        //inventory.weapons[inventory.weapons.Count-1];
+        currWeapon = weapon.GetComponent<WeaponInfo>();        
+        //weapon.transform.SetParent(equipmentRenderer.transform);
         equipmentRenderer.ChangeSprite(currWeapon.GetComponent<SpriteRenderer>().sprite);
     }
 }
