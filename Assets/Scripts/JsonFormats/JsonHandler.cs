@@ -12,30 +12,29 @@ public class JsonHandler {
 
         switch (json[0])
         {
-            case '1':
-                GameConnect gameConnect = JsonUtility.FromJson<GameConnect>(json.Substring(1));
-                Debug.Log("Event Socket parsing result: " + gameConnect);
-                EventManager.ConfirmEventSocket();
+            case '0': //Init Request
+                Debug.Log("EventSocket InitRequest confirmed.");
+                ButtonHandler.eventSocketConnected = true;
                 break;
-            case '2':
-                CommonEvent commonEvent = JsonUtility.FromJson<CommonEvent>(json.Substring(1));
-                Debug.Log("Event Socket parsing result: " + commonEvent);
-                ClientManager.HandleCommonEvent(commonEvent);
+            case '1': //회피
+                InputData inputData = JsonUtility.FromJson<InputData>(json.Substring(1));
+                Debug.Log("Event Socket parsing result: " + inputData);
+                ClientManager.HandleDodgeEvent(inputData);
                 break;
-            case '3':
-                NewPlayerEvent newPlayerEvent = JsonUtility.FromJson<NewPlayerEvent>(json.Substring(1));
-                Debug.Log("Event Socket parsing result: " + newPlayerEvent);
-                ClientManager.HandleNewPlayerEvent(newPlayerEvent);
-                break;
-            case '4':
-                GameStartEvent gameStartEvent = JsonUtility.FromJson<GameStartEvent>(json.Substring(1));
-                Debug.Log("Event Socket parsing result: " + gameStartEvent);
-                ClientManager.StartGame(gameStartEvent);                  
-                break;
-            case '5':
+            case '2': //공격
                 FireEvent fireEvent = JsonUtility.FromJson<FireEvent>(json.Substring(1));
                 Debug.Log("Event Socket parsing result: " + fireEvent);
                 ClientManager.HandleFireEvent(fireEvent);
+                break;
+            case '3': // 피격, 사망
+                HitEvent hitEvent = JsonUtility.FromJson<HitEvent>(json.Substring(1));
+                Debug.Log("Event Socket parsing result: " + hitEvent);
+                //TODO
+                break;
+            case '4': // 접속 정보
+                ConnectEvent connectEvent = JsonUtility.FromJson<ConnectEvent>(json.Substring(1));
+                Debug.Log("Event Socket parsing result: " + connectEvent);
+                ClientManager.HandleConnectEvent(connectEvent);                  
                 break;
             default:
                 break;
@@ -51,10 +50,9 @@ public class JsonHandler {
 
         switch (json[0])
         {
-            case '1':
-                GameConnect gameConnect = JsonUtility.FromJson<GameConnect>(json.Substring(1));
-                Debug.Log("Event Socket parsing result: " + gameConnect);
-                EventManager.ConfirmInputSocket();                                                
+            case '0':
+                Debug.Log("InputSocket InitRequest confirmed.");
+                ButtonHandler.inputSocketConnected = true;
                 break;
             default:
                 InputData inputData = JsonUtility.FromJson<InputData>(json);
@@ -65,71 +63,59 @@ public class JsonHandler {
         return;
     }
 
-	public static void SendGameConnect(string playerName)
+    public static void SendInitRequest(string pname)
     {
-        string eventGameConnect = "1" + JsonUtility.ToJson(new GameConnect(0, playerName));
-        string inputGameConnect = "1" + JsonUtility.ToJson(new GameConnect(1, playerName));
-        Debug.Log("GameConnect message created (Event Socket): " + eventGameConnect);
-        Debug.Log("GameConnect message created (Input Socket): " + inputGameConnect);
-        NetworkManager.writeEventSocket(eventGameConnect);
-        NetworkManager.writeInputSocket(inputGameConnect);
-        Debug.Log("GameConnect message sent.");
-        return;
+        string eventRequest = "0" + JsonUtility.ToJson(new InitRequest(pname, "grey", 0));
+        Debug.Log("EventSocket InitRequest: " + eventRequest);
+        string inputRequest = "0" + JsonUtility.ToJson(new InitRequest(pname, "grey", 1));
+        Debug.Log("InputSocket InitRequest: " + inputRequest);
+        NetworkManager.writeEventSocket(eventRequest);
+        Debug.Log("EventSocket InitRequest sent.");
+        NetworkManager.writeInputSocket(inputRequest);
+        Debug.Log("InputSocket InitRequest sent.");
     }
 
-    public static void SendGameStart (string playerName)
+    public static void SendInputData(int pnum, float x, float y, Vector2 pos, Vector2 mousePos)
     {
-        string newJson = "4" + JsonUtility.ToJson(new GameStartEvent(playerName));
-        Debug.Log("GameStartEvent message created: " + newJson);
-        NetworkManager.writeEventSocket(newJson);
-        Debug.Log("GameStartEvent message sent.");
-        return;
-    }
-
-    public static void SendInputData (int pid, float x, float y, Vector2 pos, Vector2 mousePos)
-    {
-        string newJson = JsonUtility.ToJson(new InputData(pid, x, y, pos, mousePos));
+        string newJson = JsonUtility.ToJson(new InputData(pnum, x, y, pos, mousePos));
         Debug.Log("InputData message created: " + newJson);
         NetworkManager.writeInputSocket(newJson);
         Debug.Log("InputData message sent.");
         return;
     }
 
-    public static void SendFireEvent (int pid, int bid, Vector2 firePos, Vector2 MousePos, int WeaponId, int BulletNm)
+    public static void SendDodgeEvent(int pnum, float x, float y, Vector2 pos, Vector2 mousePos)
     {
-        string newJson = "5" + JsonUtility.ToJson(new FireEvent(pid, bid, firePos, MousePos, WeaponId, BulletNm));
+        string newJson = "1" + JsonUtility.ToJson(new InputData(pnum, x, y, pos, mousePos));
+        Debug.Log("DodgeEvent message created: " + newJson);
+        NetworkManager.writeEventSocket(newJson);
+        Debug.Log("DodgeEvent message sent.");
+    }
+
+    public static void SendFireEvent(int pnum, Vector2 firePos, Vector2 mousePos, int weaponId, int bulletId)
+    {
+        string newJson = "2" + JsonUtility.ToJson(new FireEvent(pnum, firePos, mousePos, weaponId, bulletId));
         Debug.Log("FireEvent message created: " + newJson);
         NetworkManager.writeEventSocket(newJson);
         Debug.Log("FireEvent message sent.");
         return;
     }
 
-    public static void SendDodgeEvent(int pid)
+    public static void SendHitEvent(int pnum, int bnum)
     {
-        string newJson = "2" + JsonUtility.ToJson(new CommonEvent(1, pid, -1));
-        Debug.Log("DodgeEvent message created: " + newJson);
+        string newJson = "3" + JsonUtility.ToJson(new HitEvent(pnum, bnum));
+        Debug.Log("HitEvent message created: " + newJson);
         NetworkManager.writeEventSocket(newJson);
-        Debug.Log("DodgeEvent message sent.");
-    }
-
-    public static void SendCommonEvent(int eventType, int playerId, int objectId)
-    {
-        string newJson = "";
-        switch(eventType){
-            case 1:  //회피
-                break;
-            case 2: //피격
-                break;
-            case 3: //재장전
-                break;
-            case 4: //아이템습득
-                newJson = "2" + JsonUtility.ToJson(new CommonEvent(eventType, playerId, objectId));
-                break;
-            case 5: //아이템버림
-                break;
-        }
-        NetworkManager.writeEventSocket(newJson);
-        Debug.Log("CommonEvent message sent.");
+        Debug.Log("HitEvent message sent.");
         return;
     }
+
+    public static void SendConnectEvent(int mapid, int spawnid, ConnectInfo myInfo)
+    {
+        string newJson = "4" + JsonUtility.ToJson(new ConnectEvent(-1, -1, myInfo));
+        Debug.Log("ConnectEvent message created: " + newJson);
+        NetworkManager.writeEventSocket(newJson);
+        Debug.Log("ConnectEvent message sent.");
+        return;
+    }    
 }

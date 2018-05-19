@@ -6,7 +6,6 @@ public class PlayerActionController : MonoBehaviour
 {
     // Script References
     public Inventory inventory;
-    public Equipment equipment;
     public PlayerInfo playerInfo;
     public MovementController movementController;
 
@@ -17,8 +16,7 @@ public class PlayerActionController : MonoBehaviour
     public bool isFiring;
     public bool isItem; //아이템에 충돌했는가.
 
-    //private GameObject item; // 주변 아이템
-    private GameObject weapon; // for rendering
+    private GameObject weapon;
 
     private bool dodgeInput;
     public bool isDodging { get; set; }
@@ -33,16 +31,14 @@ public class PlayerActionController : MonoBehaviour
 
         // Initialize references
         inventory = GetComponent<Inventory>();
-        equipment = GetComponent<Equipment>();
         playerInfo = GetComponent<PlayerInfo>();
         movementController = GetComponent<MovementController>();
        
         //init Basic weapon
         weapon = Instantiate(Resources.Load("Prefabs/TempItem")) as GameObject;
         weapon.transform.SetPositionAndRotation(transform.position, Quaternion.identity);
-        //weaponInfo = weapon.GetComponent<WeaponInfo>(); 
-        //weaponActionController = weapon.GetComponent<WeaponActionController>();
         equipWeapon();
+        weapon.transform.SetParent(playerInfo.transform.parent);
 
         // Initialize variables
         isDodging = false;
@@ -84,6 +80,8 @@ public class PlayerActionController : MonoBehaviour
         Vector2 direction = mousePosition - firePosition;
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         Quaternion fireRotation = Quaternion.AngleAxis(angle, Vector3.forward);
+
+        // Fire
         weaponActionController.Fire(bulletId, firePosition, fireRotation);
     }
 
@@ -96,16 +94,13 @@ public class PlayerActionController : MonoBehaviour
     }
     
     public void equipWeapon(){ //아이템 장착(after server)  
-        equipment.EquipWeapon(weapon);
+
+        inventory.EquipWeapon(weapon);
         inventory.weapons.Add(weaponInfo);
+        
+        // weaponActionController.equipmentRenderer = equipment.equipmentRenderer;
 
-        //weaponActionController = equipment.currWeapon.GetComponent<WeaponActionController>();
-
-        weaponActionController.equipmentRenderer = equipment.equipmentRenderer;
-
-        //weaponInfo = equipment.currWeapon.GetComponent<WeaponInfo>();
-
-        weaponInfo = weapon.GetComponent<WeaponInfo>(); //
+        weaponInfo = weapon.GetComponent<WeaponInfo>();
         weaponActionController = weapon.GetComponent<WeaponActionController>();
     }
 

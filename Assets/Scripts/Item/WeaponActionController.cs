@@ -6,8 +6,7 @@ public class WeaponActionController : MonoBehaviour {
 
     public GameObject bulletPrefab;
     public WeaponInfo weaponInfo;
-    public EquipmentRenderer equipmentRenderer;
-        
+            
     private Vector2 firePosition;
     private Quaternion fireRotation;
     

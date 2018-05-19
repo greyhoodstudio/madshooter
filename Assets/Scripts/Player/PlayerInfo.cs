@@ -6,11 +6,11 @@ public class PlayerInfo : MonoBehaviour {
 
     // Variables
     public int playerId;
+
     public float playerHealth { get; set; }
     public float dodgeDistance { get; set; }
     public float dodgeSpeed { get; set; }
-
-
+    
 	// Use this for initialization
 	void Start () {
         
@@ -25,7 +25,8 @@ public class PlayerInfo : MonoBehaviour {
 	void Update () {
 		if (playerHealth <= 0)
         {
-            Debug.Log("Dead");// TODO 죽는 애니메이션
+            Debug.Log("Player " + playerId.ToString() + "Dead");
+            // TODO 죽는 애니메이션
         }
 	}
 }

@@ -8,10 +8,10 @@ public class MovementController : MonoBehaviour {
     public Rigidbody2D playerRigidbody;
     public PlayerActionController playerActionController;
     public PlayerInfo playerInfo;
-    public float axisX;
-    public float axisY;
 
     // Variables
+    public float axisX;
+    public float axisY;
     public float movSpeed { get; set; }
     public float rotSpeed { get; set; }
 
@@ -37,15 +37,12 @@ public class MovementController : MonoBehaviour {
 	void Update () {
 
         //Rotation
-        if (mousePosition != null)
-        {
-            mouseDirection = mousePosition - transform.position;
-            normalizedMouseDirection = mouseDirection / Vector2.Distance(transform.position, mousePosition);
+        mouseDirection = mousePosition - transform.position;
+        normalizedMouseDirection = mouseDirection / Vector2.Distance(transform.position, mousePosition);
 
-            float angle = Mathf.Atan2(mouseDirection.y, mouseDirection.x) * Mathf.Rad2Deg;
-            Quaternion rotation = Quaternion.AngleAxis(angle, Vector3.forward);
-            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, rotSpeed * Time.deltaTime);
-        }        
+        float angle = Mathf.Atan2(mouseDirection.y, mouseDirection.x) * Mathf.Rad2Deg;
+        Quaternion rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+        transform.rotation = Quaternion.Slerp(transform.rotation, rotation, rotSpeed * Time.deltaTime);
    
     }
 

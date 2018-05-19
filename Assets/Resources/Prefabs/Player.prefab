@@ -40,7 +40,6 @@ GameObject:
   - component: {fileID: 50658328242319710}
   - component: {fileID: 114169562738897054}
   - component: {fileID: 114430414812651712}
-  - component: {fileID: 114872336898206008}
   - component: {fileID: 114869476999246534}
   - component: {fileID: 58709914397381788}
   - component: {fileID: 114129359603217848}
@@ -164,6 +163,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02983fc7054f05b469db73cb10a9c763, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentWeapon: {fileID: 0}
+  weaponSpriteRenderer: {fileID: 0}
   weapons: []
 --- !u!114 &114869476999246534
 MonoBehaviour:
@@ -177,28 +178,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inventory: {fileID: 0}
-  equipment: {fileID: 0}
   playerInfo: {fileID: 0}
   movementController: {fileID: 0}
   weaponActionController: {fileID: 0}
   weaponInfo: {fileID: 0}
   isFiring: 0
-  fireLock: 0
   isItem: 0
---- !u!114 &114872336898206008
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1797098794458680}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d18b53183d1c4fc48a3a966b3db7e581, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  inventory: {fileID: 0}
-  equipmentRenderer: {fileID: 0}
-  currWeapon: {fileID: 0}
 --- !u!212 &212278204963646508
 SpriteRenderer:
   m_ObjectHideFlags: 1

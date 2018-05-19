@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class WeaponInfo : MonoBehaviour {
 
+    public int weaponId;
     public float weaponNum;
+
     public float loadSpeed;
     public float fireSpeed; // 발사 사이 간격 (초)
     public int durability; // 내구도
@@ -16,6 +18,8 @@ public class WeaponInfo : MonoBehaviour {
     public int bulletId;//장착된 총알타입
     public float x, y;
     
+    
+
     // Use this for initialization
     void Start(){
 

@@ -7,10 +7,8 @@ public class ItemActionController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         // Initialize tag
-        this.tag = "Item";
-        GetComponent<WeaponActionController>().weaponInfo = GetComponent<WeaponInfo>();
-
-	}
+        // this.tag = "Item";
+  	}
 	
 	// Update is called once per frame
 	void Update () {
@@ -19,18 +17,18 @@ public class ItemActionController : MonoBehaviour {
 
     // Get Item
     void getItem(){
-        GetComponent<WeaponActionController>().weaponInfo.status = 1; //FIXED. enum으로 변경. 
+        // GetComponent<WeaponActionController>().weaponInfo.status = 1; //FIXED. enum으로 변경. 
     }
 
     // Drop Item
     void dropItem(){
-        GetComponent<WeaponActionController>().weaponInfo.status = 2; 
+        // GetComponent<WeaponActionController>().weaponInfo.status = 2; 
     }
 
 	private void OnTriggerEnter2D(Collider2D player)
 	{
-        if(player.tag == "Player"){
-            getItem();
-        }
+        // if(player.tag == "Player"){
+        //    getItem();
+        // }
 	}
 }

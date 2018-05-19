@@ -5,26 +5,28 @@ using UnityEngine.SceneManagement;
 
 public class ClientManager : MonoBehaviour {
 
+    // 플레이어 정보
     public static string playerName; 
-    public static int playerId;
-
+    public static int playerNum;
     public GameObject myPlayer;
+
+    // 맵 전체 오브젝트 목록
     public static Dictionary<int, PlayerInfo> playerList;
     public static Dictionary<int, WeaponInfo> weaponList;
 
-    //preload gameStartEvent
-    public static GameStartEvent gameStartEvent;
+    // 맵 정보
+    public static int currentMapId = 0;
+
+    //preload ConnectEvent
+    public static ConnectEvent connectEvent;
 
     // Input variables
     private float axisX;
     private float axisY;
     private Vector2 mousePosition;
-
-    private bool LeftMouseClicked = false;
-    private bool ItemPickBtnClicked = false; 
-
-    private bool fireLock = false;
-    private bool dodgeLock = false;
+    
+    private bool fireLock = true;
+    private bool dodgeLock = true;
 
     // Counter
     private static int playerUpdateCount = 0;
@@ -51,7 +53,7 @@ public class ClientManager : MonoBehaviour {
         // Get Left Mouse Input
         if (Input.GetMouseButton(0) && !fireLock) // Do not fire if fire is on cooldown
         {
-            JsonHandler.SendFireEvent(playerId, -1, myPlayer.transform.GetChild(0).transform.position, mousePosition);
+            JsonHandler.SendFireEvent(playerNum, myPlayer.transform.GetChild(0).transform.position, mousePosition, 1, 1);
             StartCoroutine("FireLock");
         }
 
@@ -62,61 +64,107 @@ public class ClientManager : MonoBehaviour {
             StartCoroutine("DodgeLock");
         }
 
-        ItemPickBtnClicked = Input.GetKeyDown(KeyCode.F);
-        if(ItemPickBtnClicked)
+        if (Input.GetKeyDown(KeyCode.F))
         {
-            JsonHandler.SendCommonEvent(playerId, -1, 1);
+            //TODO
         }
     }
 
-    void OnGameStart(Scene scene, LoadSceneMode mode){
-        if (scene.buildIndex == 1){
-            List<NewPlayerEvent> players = gameStartEvent.PlayerList;
-
-            for (int i = 0; i < players.Count; i++)
+    public static void UpdatePlayer(InputData iData)
+    {
+        if (playerList.ContainsKey(iData.PlayerNum))
+        {
+            MovementController p = playerList[iData.PlayerNum].GetComponent<MovementController>();
+            p.axisX = iData.AxisX;
+            p.axisY = iData.AxisY;
+            p.mousePosition = new Vector2(iData.MouseX, iData.MouseY);
+            if (playerUpdateCount >= 9)
             {
-                //set player hashtable
-                NewPlayerEvent npe = players[i];
-                GameObject player = Instantiate(Resources.Load("Prefabs/Player")) as GameObject;
-                playerList.Add(npe.PlayerId, player.GetComponent<PlayerInfo>());
-                if (i == 0)
-                {
-                    playerId = npe.PlayerId; //myPlayerId
-                    Debug.Log("My player ID: " + playerId);
-                    myPlayer = player; //my player object
-                }
+                p.transform.position = new Vector2(iData.PositionX, iData.PositionY);
+                playerUpdateCount = 0;
             }
-            StartCoroutine("SendInputData");
+            playerUpdateCount++;
         }
-    }
-    
-    public static void StartGame (GameStartEvent _gameStartEvent){
-        gameStartEvent = _gameStartEvent;
-        SceneManager.LoadScene(1);
         return;
     }
 
-    IEnumerator SendInputData()
+    public static void HandleDodgeEvent(InputData iData)
     {
-        while (NetworkManager.inputSocketReady)
-        {
-            JsonHandler.SendInputData(playerId, axisX, axisY, myPlayer.transform.position, mousePosition);
-            yield return new WaitForSeconds(0.1f);
-        }
+        return;
     }
 
-    public static void HandleFireEvent (FireEvent fireEvent){
+    public static void HandleFireEvent(FireEvent fireEvent)
+    {
         PlayerInfo pInfo = null;
         int pid = fireEvent.PlayerNum;
         if (playerList.ContainsKey(pid))
             pInfo = playerList[pid];
         if (pInfo != null)
-        {   
+        {
             Vector2 firePosition = new Vector2(fireEvent.PositionX, fireEvent.PositionY);
             Vector2 mousePosition = new Vector2(fireEvent.MouseX, fireEvent.MouseY);
-            pInfo.GetComponent<PlayerActionController>().FireWeapon(fireEvent.BulletNum, firePosition, mousePosition);            
+            pInfo.GetComponent<PlayerActionController>().FireWeapon(fireEvent.BulletNum, firePosition, mousePosition);
         }
         return;
+    }
+
+    public static void HandleConnectEvent(ConnectEvent cEvent)
+    {
+        int newMapId = cEvent.MapId;
+
+        if (newMapId == currentMapId) //현재 맵에 새로운 유저 접속 시
+        {            
+            int newPlayerNum = cEvent.ConnectInfos[0].PlayerNum;
+            if (playerList.ContainsKey(newPlayerNum)) return;
+
+            GameObject player = Instantiate(Resources.Load("Prefabs/Player")) as GameObject;
+            playerList.Add(newPlayerNum, player.GetComponent<PlayerInfo>());
+        }
+        else // 신규 맵에 접속 시
+        {
+            connectEvent = cEvent;
+            currentMapId = newMapId;
+            SceneManager.LoadScene(1);
+        }        
+    }
+
+    // 씬이 로드 되었을 때 실행
+    void OnGameStart(Scene scene, LoadSceneMode mode){
+
+        if (scene.buildIndex == 1){
+
+            List<ConnectInfo> players = connectEvent.ConnectInfos; // 미리 저장해둔 ConnectEvent에서 게임 내 플레이어 정보 호출
+
+            for (int i = 0; i < players.Count; i++)
+            {
+                //set player dictionary
+                ConnectInfo cInfo = players[i];
+                GameObject player = Instantiate(Resources.Load("Prefabs/Player")) as GameObject;
+                //TODO: player 위치 설정
+                playerList.Add(cInfo.PlayerNum, player.GetComponent<PlayerInfo>());
+                
+                if (i == 0) // 나의 플레이어 정보 저장
+                {
+                    playerNum = cInfo.PlayerNum; //myPlayerId
+                    Debug.Log("My player number: " + playerNum);
+                    myPlayer = player; //my player object
+                }
+            }
+
+            // Input 정보 전송 시작
+            StartCoroutine("SendInputData");
+            fireLock = false;
+            dodgeLock = false;
+        }
+    }
+
+    IEnumerator SendInputData() // 주기적으로 입력 및 위치 정보 전송
+    {
+        while (NetworkManager.inputSocketReady)
+        {
+            JsonHandler.SendInputData(playerNum, axisX, axisY, myPlayer.transform.position, mousePosition);
+            yield return new WaitForSeconds(0.1f);
+        }
     }
 
     IEnumerator FireLock(){
@@ -130,58 +178,5 @@ public class ClientManager : MonoBehaviour {
         dodgeLock = true;
         yield return new WaitForSeconds(2f);
         dodgeLock = false;
-    }
-
-    public static void UpdatePlayer (InputData input)
-    {
-        if (playerList.ContainsKey(input.PlayerNum))
-        {
-            MovementController p = playerList[input.PlayerNum].GetComponent<MovementController>();
-            p.axisX = input.AxisX;
-            p.axisY = input.AxisY;
-            p.mousePosition = new Vector2(input.MouseX, input.MouseY);
-            if (playerUpdateCount >= 9)
-            {
-                p.transform.position = new Vector2(input.PositionX, input.PositionY);
-                playerUpdateCount = 0;
-            }
-            playerUpdateCount++;
-        }
-        return;
-    }
-
-    public static void HandleDodge (CommonEvent evnt)
-    {
-        int pid = evnt.PlayerId;
-        if (playerList.ContainsKey(pid))
-        {
-
-        }
-    }
-
-    public static void HandleNewPlayerEvent(NewPlayerEvent _newPlayerEvent){
-        int newPlayerId = _newPlayerEvent.PlayerId;
-        if (playerList.ContainsKey(newPlayerId))
-            return;
-
-        GameObject player = Instantiate(Resources.Load("Prefabs/Player")) as GameObject;
-        playerList.Add(newPlayerId, player.GetComponent<PlayerInfo>());
-    }
-
-    public static void HandleCommonEvent(CommonEvent commonEvent){
-        int eventType = commonEvent.EventType;
-        switch (eventType){
-            case 1: //회피
-                break;
-            case 2: //피격
-                break;
-            case 3: //재장전
-                break;
-            case 4: //아이템습득
-                playerList[commonEvent.PlayerId].GetComponent<PlayerActionController>().weaponInfo = weaponList[commonEvent.ObjectId];
-                break;
-            case 5: //아이템버림
-                break;
-        }
     }
 }

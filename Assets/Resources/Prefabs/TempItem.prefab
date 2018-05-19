@@ -26,7 +26,7 @@ GameObject:
   - component: {fileID: 212558677736291168}
   m_Layer: 0
   m_Name: TempItem
-  m_TagString: TempItem
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -38,7 +38,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1137900464191428}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.0458086, y: -0.65054345, z: -0.18241943}
+  m_LocalPosition: {x: -35.41, y: -14.08, z: -0.18241943}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -70,7 +70,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6bd9e138fee50e74e8c4ad73d9dfb42b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  weaponId: 0
+  weaponNum: 1
+  loadSpeed: 0
+  fireSpeed: 0
+  durability: 0
+  range: 0
+  loadBulletCnt: 0
   sprite: {fileID: 21300000, guid: fa3bccb15aacf430e8ac3499d2338d31, type: 3}
+  status: 0
+  playerId: 0
+  bulletId: 0
+  x: 0
+  y: 0
 --- !u!114 &114224506731291836
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -95,7 +107,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bulletPrefab: {fileID: 1631028880721362, guid: 303b3501688d5b440b2ecee99e678ebe,
     type: 2}
-  equipmentPart: {fileID: 0}
+  weaponInfo: {fileID: 0}
 --- !u!212 &212558677736291168
 SpriteRenderer:
   m_ObjectHideFlags: 1

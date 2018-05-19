@@ -4,24 +4,26 @@ using UnityEngine;
 
 public class Inventory : MonoBehaviour {
 
-    // Script References
-    // public ItemManager itemManager;
+    // Script References    
 
     // Variables
-    public List<WeaponInfo> weapons; // List of weapons in inventory
+    public WeaponInfo currentWeapon;
+    public SpriteRenderer weaponSpriteRenderer;
 
-    private void Awake() {
-        
-    }
+    public List<WeaponInfo> weapons; // List of weapons in inventory
+    
 
     // Use this for initialization
     void Start () {
-        // Initialize References
-    //    itemManager = FindObjectOfType<ItemManager>().GetComponent<ItemManager>();
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+
+        // Initialize references
+        weaponSpriteRenderer = transform.GetChild(0).GetComponent<SpriteRenderer>();
+
+    }
+
+    public void EquipWeapon(GameObject weapon)
+    {
+        currentWeapon = weapon.GetComponent<WeaponInfo>();
+        weaponSpriteRenderer.sprite = currentWeapon.sprite;        
+    }
 }
