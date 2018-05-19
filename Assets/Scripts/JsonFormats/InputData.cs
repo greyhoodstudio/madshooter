@@ -6,17 +6,22 @@ using System;
 [Serializable]
 public class InputData {
 
-    public int player_id;
-    public int axis_x;
-    public int axis_y;
-    public float position_x;
-    public float position_y;
-    // 다른 Input에 대한 것도 추가 고려
-
-    public InputData (int playerId, float axisX, float axisY)
+    public int PlayerNum;
+    public int AxisX;
+    public int AxisY;
+    public float PositionX;
+    public float PositionY;
+    public float MouseX;
+    public float MouseY;
+    
+    public InputData (int playerId, float axisX, float axisY, Vector2 position, Vector2 mousePosition)
     {
-        player_id = playerId;
-        axis_x = (int)axisX;
-        axis_y = (int)axisY;
+        PlayerNum = playerId;
+        AxisX = (int)axisX;
+        AxisY = (int)axisY;
+        PositionX = (float)Math.Round(position.x, 4);
+        PositionY = (float)Math.Round(position.y, 4);
+        MouseX = (float)Math.Round(mousePosition.x, 4);
+        MouseY = (float)Math.Round(mousePosition.y, 4);
     }
 }

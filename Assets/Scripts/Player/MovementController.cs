@@ -36,19 +36,16 @@ public class MovementController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        //Movement
-        //axisX = Input.GetAxis("Horizontal");
-        //axisY = Input.GetAxis("Vertical");
-
         //Rotation
+        if (mousePosition != null)
+        {
+            mouseDirection = mousePosition - transform.position;
+            normalizedMouseDirection = mouseDirection / Vector2.Distance(transform.position, mousePosition);
 
-        mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        mouseDirection = mousePosition - transform.position;
-        normalizedMouseDirection = mouseDirection / Vector2.Distance(transform.position, mousePosition);
-
-        float angle = Mathf.Atan2(mouseDirection.y, mouseDirection.x) * Mathf.Rad2Deg;
-        Quaternion rotation = Quaternion.AngleAxis(angle, Vector3.forward);
-        transform.rotation = Quaternion.Slerp(transform.rotation, rotation, rotSpeed * Time.deltaTime);
+            float angle = Mathf.Atan2(mouseDirection.y, mouseDirection.x) * Mathf.Rad2Deg;
+            Quaternion rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, rotSpeed * Time.deltaTime);
+        }        
    
     }
 
@@ -66,6 +63,8 @@ public class MovementController : MonoBehaviour {
         {
             // Movement
             playerRigidbody.velocity = new Vector2(axisX*movSpeed, axisY*movSpeed);
+
+            // Activate to enable Super Meat Boy style movement
             //playerRigidbody.AddForce(new Vector2(axisX * movSpeed - playerRigidbody.velocity.x, axisY * movSpeed - playerRigidbody.velocity.y));
             //playerRigidbody.velocity = new Vector2(axisX == 0 ? 0 : playerRigidbody.velocity.x, axisY == 0 ? 0 : playerRigidbody.velocity.y);
         }

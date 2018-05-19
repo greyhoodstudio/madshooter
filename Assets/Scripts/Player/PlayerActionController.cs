@@ -15,11 +15,8 @@ public class PlayerActionController : MonoBehaviour
 
     // Variables
     public bool isFiring;
-    public bool fireLock = true;
-
     public bool isItem; //아이템에 충돌했는가.
-    private GameObject item; // 주변 아이템
-    
+    private GameObject item; // 주변 아이템    
     private bool dodgeInput;
     public bool isDodging { get; set; }
 
@@ -43,27 +40,12 @@ public class PlayerActionController : MonoBehaviour
         // Initialize variables
         isDodging = false;
         isItem = false;
-        fireLock = false;
-        
+                
 	}
 	
 	// Update is called once per frame
     void Update()
     {
-        // Fire
-        // isFiring = Input.GetMouseButton(0);
-        // if (isFiring && !fireLock && equipment.currWeapon)
-        // {
-        //     weaponActionController.Fire();
-        //     StartCoroutine("FireLock");
-        // }
-
-        // Dodge
-        dodgeInput = Input.GetMouseButton(1);
-        if (dodgeInput && !isDodging) {
-            StartCoroutine("Dodge");
-        }
-
         // Item Pick Up
         if (Input.GetKeyDown(KeyCode.F) && isItem)
         {
@@ -86,6 +68,14 @@ public class PlayerActionController : MonoBehaviour
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         Quaternion fireRotation = Quaternion.AngleAxis(angle, Vector3.forward);
         weaponActionController.Fire(bulletId, firePosition, fireRotation);
+    }
+
+    public void TriggerDodge()
+    {
+        if (!isDodging)
+        {
+            StartCoroutine("Dodge");
+        }
     }
 
     void equipItem(){

@@ -7,23 +7,23 @@ public class ClientManager : MonoBehaviour {
 
     public static string playerName; 
     public static int playerId;
-    public GameObject myPlayer;
 
+    public GameObject myPlayer;
     public static Dictionary<int, PlayerInfo> playerList;
     
-
     //preload gameStartEvent
     public static GameStartEvent gameStartEvent; 
-
-
+    
     // Input variables
     private float axisX;
     private float axisY;
     private Vector2 mousePosition;
-    private bool LeftMouseClicked = false;
     private bool fireLock = false;
+    private bool dodgeLock = false;
 
-
+    // Counter
+    private static int playerUpdateCount = 0;
+    
     private void Start()
     {
         playerList = new Dictionary<int, PlayerInfo>();
@@ -42,14 +42,21 @@ public class ClientManager : MonoBehaviour {
         else if (axisY < 0) axisY = -1;
 
         // Get Mouse Position
-        LeftMouseClicked = Input.GetMouseButton(0);
-        if (LeftMouseClicked && !fireLock)
+        mousePosition = (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+        // Get Left Mouse Input
+        if (Input.GetMouseButton(0) && !fireLock) // Do not fire if fire is on cooldown
         {
-            mousePosition = (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition);
             JsonHandler.SendFireEvent(playerId, -1, myPlayer.transform.GetChild(0).transform.position, mousePosition);
             StartCoroutine("FireLock");
-        }        
-        
+        }
+
+        // Get Right Mouse Input
+        if (Input.GetMouseButton(1) && !dodgeLock)
+        {
+            // Send Event
+            StartCoroutine("DodgeLock");
+        }
     }
 
     void OnGameStart(Scene scene, LoadSceneMode mode)
@@ -87,7 +94,7 @@ public class ClientManager : MonoBehaviour {
     {
         while (NetworkManager.inputSocketReady)
         {
-            JsonHandler.SendInputData(playerId, axisX, axisY);
+            JsonHandler.SendInputData(playerId, axisX, axisY, myPlayer.transform.position, mousePosition);
             yield return new WaitForSeconds(0.1f);
         }
     }
@@ -95,14 +102,14 @@ public class ClientManager : MonoBehaviour {
     public static void HandleFireEvent (FireEvent fireEvent)
     {
         PlayerInfo pInfo = null;
-        int pid = fireEvent.PlayerId;
+        int pid = fireEvent.PlayerNum;
         if (playerList.ContainsKey(pid))
             pInfo = playerList[pid];
         if (pInfo != null)
         {   
-            Vector2 firePosition = new Vector2(fireEvent.FirePosX, fireEvent.FirePosY);
-            Vector2 mousePosition = new Vector2(fireEvent.MousePosX, fireEvent.MousePosY);
-            pInfo.GetComponent<PlayerActionController>().FireWeapon(fireEvent.BulletId, firePosition, mousePosition);            
+            Vector2 firePosition = new Vector2(fireEvent.PositionX, fireEvent.PositionY);
+            Vector2 mousePosition = new Vector2(fireEvent.MouseX, fireEvent.MouseY);
+            pInfo.GetComponent<PlayerActionController>().FireWeapon(fireEvent.BulletNum, firePosition, mousePosition);            
         }
         return;
     }
@@ -114,15 +121,38 @@ public class ClientManager : MonoBehaviour {
         fireLock = false;
     }
 
+    IEnumerator DodgeLock()
+    {
+        dodgeLock = true;
+        yield return new WaitForSeconds(2f);
+        dodgeLock = false;
+    }
+
     public static void UpdatePlayer (InputData input)
     {
-        if (playerList.ContainsKey(input.player_id))
+        if (playerList.ContainsKey(input.PlayerNum))
         {
-            MovementController p = playerList[input.player_id].GetComponent<MovementController>();
-            p.axisX = input.axis_x;
-            p.axisY = input.axis_y;
+            MovementController p = playerList[input.PlayerNum].GetComponent<MovementController>();
+            p.axisX = input.AxisX;
+            p.axisY = input.AxisY;
+            p.mousePosition = new Vector2(input.MouseX, input.MouseY);
+            if (playerUpdateCount >= 9)
+            {
+                p.transform.position = new Vector2(input.PositionX, input.PositionY);
+                playerUpdateCount = 0;
+            }
+            playerUpdateCount++;
         }
         return;
+    }
+
+    public static void HandleDodge (CommonEvent evnt)
+    {
+        int pid = evnt.PlayerId;
+        if (playerList.ContainsKey(pid))
+        {
+
+        }
     }
 
     public static void HandleNewPlayerEvent(NewPlayerEvent _newPlayerEvent){

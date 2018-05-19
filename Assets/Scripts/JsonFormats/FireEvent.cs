@@ -5,21 +5,23 @@ using System;
 
 public class FireEvent {
 
-    public int PlayerId;
+    public int PlayerNum;    
+    public float PositionX;
+    public float PositionY;
+    public float MouseX;
+    public float MouseY;
+    public int WeaponId;
+    public int BulletNum;
     public int BulletId;
-    public float FirePosX;
-    public float FirePosY;
-    public float MousePosX;
-    public float MousePosY;
 
-    public FireEvent (int pid, int bid, Vector2 firePos, Vector2 MousePos)
+    public FireEvent (int pnum, int bnum, Vector2 firePos, Vector2 MousePos)
     {
-        PlayerId = pid;
-        BulletId = bid;
-        FirePosX = (float)Math.Round(firePos.x, 4);
-        FirePosY = (float)Math.Round(firePos.y, 4);
-        MousePosX = (float)Math.Round(MousePos.x, 4);
-        MousePosY = (float)Math.Round(MousePos.y, 4);
+        PlayerNum = pnum;
+        BulletNum = bnum;
+        PositionX = (float)Math.Round(firePos.x, 4);
+        PositionY = (float)Math.Round(firePos.y, 4);
+        MouseX = (float)Math.Round(MousePos.x, 4);
+        MouseY = (float)Math.Round(MousePos.y, 4);
     }
 
 }

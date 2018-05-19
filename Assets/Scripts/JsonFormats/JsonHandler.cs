@@ -85,9 +85,9 @@ public class JsonHandler {
         return;
     }
 
-    public static void SendInputData (int pid, float x, float y)
+    public static void SendInputData (int pid, float x, float y, Vector2 pos, Vector2 mousePos)
     {
-        string newJson = JsonUtility.ToJson(new InputData(pid, x, y));
+        string newJson = JsonUtility.ToJson(new InputData(pid, x, y, pos, mousePos));
         Debug.Log("InputData message created: " + newJson);
         NetworkManager.writeInputSocket(newJson);
         Debug.Log("InputData message sent.");
@@ -100,6 +100,15 @@ public class JsonHandler {
         Debug.Log("FireEvent message created: " + newJson);
         NetworkManager.writeEventSocket(newJson);
         Debug.Log("FireEvent message sent.");
+        return;
+    }
+
+    public static void SendDodgeEvent (int pid)
+    {
+        string newJson = "2" + JsonUtility.ToJson(new CommonEvent(1, pid, -1));
+        Debug.Log("DodgeEvent message created: " + newJson);
+        NetworkManager.writeEventSocket(newJson);
+        Debug.Log("DodgeEvent message sent.");
         return;
     }
 }
